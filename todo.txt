@@ -1,0 +1,6 @@
+- Datenbank laden
+- Hauptmenü
+- Dungeon Generator
+- Player Controller
+- (Texturen)
+- Kampfsystem (basic, wenn mehr zeit komplexer)
