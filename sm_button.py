@@ -1,8 +1,13 @@
 class sm_button:
-    def __init__(self, HEIGHT, WIDHT, x, y, text, color):
+    def __init__(self, WIDTH, HEIGHT, x, y, text, color, action=None):
         self.HEIGHT = HEIGHT
-        self.WIDHT = WIDHT
+        self.WIDTH = WIDTH
         self.x = x
-        self.y = y 
+        self.y = y
         self.text = text
         self.color = color
+        if action:
+            self.action = action
+
+    def action(self):
+        print("WARNING: Button has no action attached")
