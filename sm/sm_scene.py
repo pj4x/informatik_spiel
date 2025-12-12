@@ -30,6 +30,9 @@ class sm_scene:
     def update(self):
         pass
 
+    ##################################################################
+    # add functions
+    ##################################################################
     def add_button(self, button: sm_button.sm_button):
         self.buttons.append(button)
 
@@ -42,6 +45,9 @@ class sm_scene:
         else:
             print("WARNING: cant add player to none game scene")
 
+    ##################################################################
+    # draw functions
+    ##################################################################
     def draw_buttons(self):
         for i in self.buttons:
             pygame.draw.rect(self.screen, i.color, (i.x, i.y, i.WIDTH, i.HEIGHT))
@@ -67,6 +73,9 @@ class sm_scene:
         if self.is_game_scene:
             self.screen.blit(self.player.image, self.player.rect)
 
+    ##################################################################
+    # hud functions
+    ##################################################################
     def check_buttons(self, pos):
         for i in self.buttons:
             if (

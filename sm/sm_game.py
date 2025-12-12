@@ -29,14 +29,17 @@ class sm_game:
         self.scenes.append(scene)
 
     def draw_current_scene(self):
-        self.current_scene.draw_texts()
-        self.current_scene.draw_buttons()
-
+        # draw player and enemies if current scene is game scene
         if self.current_scene.is_game_scene:
             self.current_scene.draw_enemies()
             self.current_scene.draw_player()
 
+        # draw hud elements
+        self.current_scene.draw_texts()
+        self.current_scene.draw_buttons()
+
     def update(self):
+        # run update functions for scene and player if current scene is game scene
         if self.current_scene.is_game_scene:
             self.current_scene.player.update()
             self.current_scene.update()
