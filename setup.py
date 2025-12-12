@@ -28,30 +28,41 @@ game.add_scene(test_scene)
 game.change_scene(0)
 
 
-txt = sm_text.sm_text("TEST", 0, 500, pygame.font.SysFont("arial", 32), (255, 255, 255))
-
-
 def btn_action(b: sm_button.sm_button):
     b.text = "pressed"
 
 
-btn = sm_button.sm_button(
-    100,
-    50,
-    0,
-    0,
-    "test",
-    (255, 0, 0),
-    pygame.font.SysFont("arial", 16),
-    (0, 0, 0),
-    btn_action,
+test_scene.add_text(
+    sm_text.sm_text(
+        "TEST",
+        0,
+        500,
+        pygame.font.SysFont("arial", 32),
+        (255, 255, 255),
+    )
 )
 
-pp = sm_player.sm_player(400, 300, "textures/sprites/player.png")
+test_scene.add_button(
+    sm_button.sm_button(
+        100,
+        50,
+        0,
+        0,
+        "test",
+        (255, 0, 0),
+        pygame.font.SysFont("arial", 16),
+        (0, 0, 0),
+        btn_action,
+    )
+)
 
-test_scene.add_text(txt)
-test_scene.add_button(btn)
-test_scene.add_player(pp)
+test_scene.add_player(
+    sm_player.sm_player(
+        400,
+        300,
+        "textures/sprites/player.png",
+    )
+)
 
 
 ##################################################################
