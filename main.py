@@ -14,7 +14,7 @@ import sm_text
 # Initialise constants
 WIDTH, HEIGHT = 800, 600
 FPS = 60
-name = "t-t-t-test"
+name = "dungeon crawler"
 running = True
 
 ##################################################################
@@ -22,19 +22,29 @@ running = True
 ##################################################################
 game = sm_game.sm_game(WIDTH, HEIGHT, name, FPS)
 
-test_scene = sm_scene.sm_scene(game.screen, game.font, (30, 30, 30), is_game_scene=True)
+test_scene = sm_scene.sm_scene(game.screen, (30, 30, 30), is_game_scene=True)
 game.add_scene(test_scene)
 game.change_scene(0)
 
 
-txt = sm_text.sm_text("TEST", 0, 500)
+txt = sm_text.sm_text("TEST", 0, 500, pygame.font.SysFont("arial", 32), (255, 255, 255))
 
 
 def btn_action(b: sm_button.sm_button):
     b.text = "pressed"
 
 
-btn = sm_button.sm_button(100, 50, 0, 0, "test", (255, 0, 0), btn_action)
+btn = sm_button.sm_button(
+    100,
+    50,
+    0,
+    0,
+    "test",
+    (255, 0, 0),
+    pygame.font.SysFont("arial", 16),
+    (0, 0, 0),
+    btn_action,
+)
 
 pp = sm_player.sm_player(400, 300, "textures/sprites/player.png")
 

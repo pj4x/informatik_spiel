@@ -2,7 +2,12 @@ import pygame
 
 
 class sm_player(pygame.sprite.Sprite):
-    def __init__(self, x, y, image_path):
+    def __init__(
+        self,
+        x,
+        y,
+        image_path,
+    ):
         super().__init__()
 
         # Load the PNG texture with alpha transparency

@@ -1,5 +1,3 @@
-from multiprocessing import set_forkserver_preload
-
 import pygame
 import sm_button
 import sm_enemy
@@ -15,10 +13,15 @@ class sm_scene:
     bg_color = (0, 0, 0)
     player: sm_player.sm_player
 
-    def __init__(self, s, f, bg, update=None, is_game_scene=False):
+    def __init__(
+        self,
+        s,
+        bg,
+        update=None,
+        is_game_scene=False,
+    ):
         pygame.font.init()
         self.screen = s
-        self.font = f
         self.bg_color = bg
         if update:
             self.update = update
@@ -42,7 +45,7 @@ class sm_scene:
     def draw_buttons(self):
         for i in self.buttons:
             pygame.draw.rect(self.screen, i.color, (i.x, i.y, i.WIDTH, i.HEIGHT))
-            text_surface = self.font.render(i.text, True, (0, 0, 0))
+            text_surface = i.font.render(i.text, True, i.f_color)
             self.screen.blit(
                 text_surface,
                 (
@@ -53,7 +56,7 @@ class sm_scene:
 
     def draw_texts(self):
         for i in self.texts:
-            text_surface = self.font.render(i.text, True, (255, 255, 255))
+            text_surface = i.font.render(i.text, True, i.f_color)
             self.screen.blit(text_surface, (i.x, i.y))
 
     def draw_enemies(self):

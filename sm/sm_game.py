@@ -8,11 +8,16 @@ class sm_game:
     screen: pygame.Surface
     clock: pygame.time.Clock
 
-    def __init__(self, WIDTH, HEIGHT, name, FPS):
+    def __init__(
+        self,
+        WIDTH,
+        HEIGHT,
+        name,
+        FPS,
+    ):
         # initialise pygame
         pygame.init()
         pygame.font.init()
-        self.font = pygame.font.SysFont("arial", 16)
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption(name)
         self.clock = pygame.time.Clock()
