@@ -10,7 +10,6 @@ class sm_enemy(pygame.sprite.Sprite):
         y,
         image_path,
     ):
-        self.img = img
         self.damage = damage
         self.hp = hp
         self.x = x
