@@ -12,7 +12,7 @@ class sm_player(pygame.sprite.Sprite):
 
         # Load the PNG texture with alpha transparency
         self.image = pygame.image.load(image_path).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (32, 32))
+        self.image = pygame.transform.scale(self.image, (64, 64))
 
         # Rect for positioning
         self.rect = self.image.get_rect(topleft=(x, y))

@@ -58,8 +58,8 @@ test_scene.add_button(
 
 test_scene.add_player(
     sm_player.sm_player(
-        400,
-        300,
+        (256 * 64) // 2,
+        (256 * 64) // 2,
         "textures/sprites/player.png",
     )
 )
