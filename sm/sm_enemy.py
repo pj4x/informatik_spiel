@@ -4,7 +4,6 @@ import pygame
 class sm_enemy(pygame.sprite.Sprite):
     def __init__(
         self,
-        img,
         damage,
         hp,
         x,
