@@ -22,6 +22,8 @@ while setup.running:
     setup.game.screen.fill(setup.game.current_scene.bg_color)
     setup.game.draw_current_scene()
 
+    print(setup.game.current_scene.player.rect.topleft)
+
     pygame.display.flip()
     setup.game.clock.tick(setup.FPS)
 

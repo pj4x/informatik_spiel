@@ -43,3 +43,4 @@ class sm_game:
         if self.current_scene.is_game_scene:
             self.current_scene.player.update()
             self.current_scene.update()
+            self.current_scene.camera.update(self.current_scene.player)
