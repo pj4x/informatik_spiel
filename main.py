@@ -2,10 +2,12 @@ import sys
 
 import pygame
 
+# only for tests counter variabel
+counter = 0
 # import setup of classes and window
 import setup
 
-while setup.running:
+while setup.running == True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             setup.running = False
@@ -22,7 +24,14 @@ while setup.running:
     setup.game.screen.fill(setup.game.current_scene.bg_color)
     setup.game.draw_current_scene()
 
-    print(setup.game.current_scene.player.rect.topleft)
+    # du huso das kann nicht funktionieren wenn ich in einer nicht game scene bin du musst das mit einer abfrage machen ob es überhaupt einen player gibt 
+    try:
+        print(setup.game.current_scene.player.rect.topleft)
+    except:
+        counter += 1
+        if counter > 100:
+            print("no player in this scene")
+            counter = 0
 
     pygame.display.flip()
     setup.game.clock.tick(setup.FPS)
