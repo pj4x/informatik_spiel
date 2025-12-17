@@ -82,7 +82,7 @@ menu_scene.add_button(
         (100, 0, 0),
         pygame.font.SysFont("arial", 42),
         (0, 0, 0),
-        btn_action,
+        btn_inv,
     )
 )
 menu_scene.add_button(
@@ -110,7 +110,7 @@ test_scene.add_player(
 )
 
 # inventory scene
-menu_scene.add_text(
+inv_scene.add_text(
     sm_text.sm_text(
         "Inventory",
         310,
