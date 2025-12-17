@@ -25,39 +25,42 @@ game = sm_game.sm_game(WIDTH, HEIGHT, name, FPS)
 
 
 # adding scenes to main scene array
-test_scene = sm_scene.sm_scene(game.screen, (30, 30, 30), is_game_scene=True)
+test_scene = sm_scene.sm_scene(game.screen, (255, 0, 0), "test", is_game_scene=True)
 game.add_scene(test_scene)
-menu_scene = sm_scene.sm_scene(game.screen, (30, 30, 30), is_game_scene=False)
-game.add_scene(menu_scene)
-inv_scene = sm_scene.sm_scene(game.screen, (30, 30, 30), is_game_scene=False)
-game.add_scene(inv_scene)
+menu_scene = sm_scene.sm_scene(game.screen, (0, 255, 0), "menu", is_game_scene=False)
+# game.add_scene(menu_scene)
+inv_scene = sm_scene.sm_scene(game.screen, (0, 0, 255), "inv", is_game_scene=False)
+# game.add_scene(inv_scene)
 
-game.change_scene(1)
+game.change_scene(0)
 
 
 def btn_action(b: sm_button.sm_button):
     b.text = "game has been generated"
     game.change_scene(0)
+
+
 def btn_quit(b: sm_button.sm_button):
     b.text = "wait game save"
-    running = False
     pygame.quit()
     sys.exit()
+
+
 def btn_inv(b: sm_button.sm_button):
     b.text = "Inventory loaded"
     game.change_scene(2)
 
 
 # Main menu scene
-menu_scene.add_text(
-    sm_text.sm_text(
-        "Main Menu",
-        310,
-        10,
-        pygame.font.SysFont("arial", 42),
-        (255, 255, 255),
-    )
-)
+# menu_scene.add_text(
+#    sm_text.sm_text(
+#        "Main Menu",
+#        310,
+#        10,
+#        pygame.font.SysFont("arial", 42),
+#        (255, 255, 255),
+#    )
+# )
 
 menu_scene.add_button(
     sm_button.sm_button(
