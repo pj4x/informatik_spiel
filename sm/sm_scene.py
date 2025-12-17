@@ -18,12 +18,14 @@ class sm_scene:
         self,
         s,
         bg,
+        name,
         update=None,
         is_game_scene=False,
     ):
         pygame.font.init()
         self.screen = s
         self.bg_color = bg
+        self.name = name
         if update:
             self.update = update
         self.is_game_scene = is_game_scene
@@ -47,34 +49,6 @@ class sm_scene:
             self.player = p
         else:
             print("WARNING: cant add player to none game scene")
-
-    ##################################################################
-    # draw functions
-    ##################################################################
-    def draw_buttons(self):
-        for i in self.buttons:
-            pygame.draw.rect(self.screen, i.color, (i.x, i.y, i.WIDTH, i.HEIGHT))
-            text_surface = i.font.render(i.text, True, i.f_color)
-            self.screen.blit(
-                text_surface,
-                (
-                    i.x + i.WIDTH // 2 - text_surface.get_width() // 2,
-                    i.y + i.HEIGHT // 2 - text_surface.get_height() // 2,
-                ),
-            )
-
-    def draw_texts(self):
-        for i in self.texts:
-            text_surface = i.font.render(i.text, True, i.f_color)
-            self.screen.blit(text_surface, (i.x, i.y))
-
-    def draw_enemies(self):
-        if self.is_game_scene:
-            pass  # TODO
-
-    def draw_player(self):
-        if self.is_game_scene:
-            self.screen.blit(self.player.image, self.camera.apply(self.player.rect))
 
     ##################################################################
     # hud functions
