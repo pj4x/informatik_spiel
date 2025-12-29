@@ -7,6 +7,7 @@ class sm_game:
     screen: pygame.Surface
     clock: pygame.time.Clock
     current_scene = 0
+    dt = 0.0
 
     def __init__(
         self,
@@ -43,27 +44,34 @@ class sm_game:
             )
 
         # draw texts
-        for i in self.scenes[self.current_scene].texts:
-            text_surface = i.font.render(i.text, True, i.f_color)
-            self.screen.blit(text_surface, (i.x, i.y))
+        try:
+            for i in self.scenes[self.current_scene].texts:
+                text_surface = i.font.render(i.text, True, i.f_color)
+                self.screen.blit(text_surface, (i.x, i.y))
+        except:
+            pass
 
+        try:
         # draw buttons
-        for i in self.scenes[self.current_scene].buttons:
-            pygame.draw.rect(self.screen, i.color, (i.x, i.y, i.WIDTH, i.HEIGHT))
-            text_surface = i.font.render(i.text, True, i.f_color)
-            self.screen.blit(
-                text_surface,
-                (
-                    i.x + i.WIDTH // 2 - text_surface.get_width() // 2,
-                    i.y + i.HEIGHT // 2 - text_surface.get_height() // 2,
-                ),
-            )
+            for i in self.scenes[self.current_scene].buttons:
+                pygame.draw.rect(self.screen, i.color, (i.x, i.y, i.WIDTH, i.HEIGHT))
+                text_surface = i.font.render(i.text, True, i.f_color)
+                self.screen.blit(
+                    text_surface,
+                    (
+                        i.x + i.WIDTH // 2 - text_surface.get_width() // 2,
+                        i.y + i.HEIGHT // 2 - text_surface.get_height() // 2,
+                    ),
+                )
+        except:
+            pass
 
     def update(self):
         # run update functions for scene and player if current scene is game scene
         if self.scenes[self.current_scene].is_game_scene:
-            self.scenes[self.current_scene].player.update()
+            self.scenes[self.current_scene].player.update(self.dt)
             self.scenes[self.current_scene].update()
             self.scenes[self.current_scene].camera.update(
-                self.scenes[self.current_scene].player
+                self.scenes[self.current_scene].player,
+                self.dt
             )

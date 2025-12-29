@@ -15,6 +15,3 @@ for i in range(0,lines,1):
     hp = cur.execute('select hp from enemies where id = 1')
     img_path = cur.execute('select img from enemies where id = 1')
     sm_enemy.sm_enemy(damage,hp,0,0,img_path)
-
-
-

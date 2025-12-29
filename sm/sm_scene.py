@@ -7,9 +7,6 @@ import sm_text
 
 
 class sm_scene:
-    enemies: list[sm_enemy.sm_enemy] = []
-    buttons: list[sm_button.sm_button] = []
-    texts: list[sm_text.sm_text] = []
     screen: pygame.Surface
     bg_color = (0, 0, 0)
     player: sm_player.sm_player
@@ -39,26 +36,44 @@ class sm_scene:
     # add functions
     ##################################################################
     def add_button(self, button: sm_button.sm_button):
-        self.buttons.append(button)
+        try:
+            self.buttons.append(button)
+        except:
+            self.buttons: list[sm_button.sm_button] = []
+            self.buttons.append(button)
 
     def add_text(self, text: sm_text.sm_text):
-        self.texts.append(text)
+        try:
+            self.texts.append(button)
+        except:
+            self.texts: list[sm_text.sm_text] = []
+            self.texts.append(text)
 
     def add_player(self, p: sm_player.sm_player):
         if self.is_game_scene:
             self.player = p
         else:
             print("WARNING: cant add player to none game scene")
+    
+    def add_enemy(self, e: sm_enemy):
+        try:
+            self.enemies.append(e)
+        except:
+            enemies: list[sm_enemy.sm_enemy] = []
+            self.enemies.append(e)
 
     ##################################################################
     # hud functions
     ##################################################################
     def check_buttons(self, pos):
-        for i in self.buttons:
-            if (
-                i.x <= pos[0]
-                and i.x + i.WIDTH >= pos[0]
-                and i.y <= pos[1]
-                and i.y + i.HEIGHT >= pos[1]
-            ):
-                i.action(i)
+        try:
+            for i in self.buttons:
+                if (
+                    i.x <= pos[0]
+                    and i.x + i.WIDTH >= pos[0]
+                    and i.y <= pos[1]
+                    and i.y + i.HEIGHT >= pos[1]
+                ):
+                    i.action(i)
+        except:
+            pass

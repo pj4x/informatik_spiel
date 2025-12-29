@@ -26,7 +26,8 @@ class sm_camera:
         # apply to manual x,y positions
         return (pos[0] - self.rect.x, pos[1] - self.rect.y)
 
-    def update(self, target):
+    def update(self, target, dt):
+        
         # center camera on target
         x = target.rect.centerx - self.SCREEN_WIDTH // 2
         y = target.rect.centery - self.SCREEN_HEIGHT // 2
