@@ -6,6 +6,7 @@ class sm_player(pygame.sprite.Sprite):
         self,
         x,
         y,
+        speed,
         image_path,
     ):
         super().__init__()
@@ -17,15 +18,15 @@ class sm_player(pygame.sprite.Sprite):
         # Rect for positioning
         self.rect = self.image.get_rect(topleft=(x, y))
 
-        self.speed = 20
+        self.speed = speed
 
-    def update(self, dt):
+    def update(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w]:
-            self.rect.y -= self.speed * dt
+            self.rect.y -= self.speed
         if keys[pygame.K_s]:
-            self.rect.y += self.speed * dt
+            self.rect.y += self.speed
         if keys[pygame.K_a]:
-            self.rect.x -= self.speed * dt
+            self.rect.x -= self.speed
         if keys[pygame.K_d]:
-            self.rect.x += self.speed * dt
+            self.rect.x += self.speed

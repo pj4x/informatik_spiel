@@ -54,13 +54,20 @@ class sm_scene:
             self.player = p
         else:
             print("WARNING: cant add player to none game scene")
-    
+
     def add_enemy(self, e: sm_enemy):
         try:
             self.enemies.append(e)
         except:
             enemies: list[sm_enemy.sm_enemy] = []
             self.enemies.append(e)
+
+    def add_map(self, tilemap, tileset):
+        if self.is_game_scene:
+            self.tilemap = tilemap
+            self.tileset = tileset
+        else:
+            print("WARNING: cant add tilemap to none game scene")
 
     ##################################################################
     # hud functions

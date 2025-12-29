@@ -15,21 +15,29 @@ import sm_text
 # Initialise constants
 WIDTH, HEIGHT = 800, 600
 FPS = 60
+MAP_SIZE = 256
+TILE_SIZE = 64
 name = "dungeon crawler"
 running = True
 
+
 ##################################################################
-# Initialise classes
+# Initialise classes and tilemap
 ##################################################################
-game = sm_game.sm_game(WIDTH, HEIGHT, name, FPS)
+
+# dont actually need to provide tile size since we use standard(64), but for consistency sake
+game = sm_game.sm_game(
+    WIDTH, HEIGHT, name, FPS, TILE_SIZE=TILE_SIZE, cam_scroll_style=1
+)
 
 
 # adding scenes to main scene array
 game.add_scene(sm_scene.sm_scene(game.screen, (30, 30, 30), "test", is_game_scene=True))
-game.add_scene(sm_scene.sm_scene(game.screen, (30, 30, 30), "menu", is_game_scene=False))
+game.add_scene(
+    sm_scene.sm_scene(game.screen, (30, 30, 30), "menu", is_game_scene=False)
+)
 game.add_scene(sm_scene.sm_scene(game.screen, (30, 30, 30), "inv", is_game_scene=False))
 game.change_scene(1)
-
 
 
 def btn_action(b: sm_button.sm_button):
@@ -47,13 +55,13 @@ def btn_inv(b: sm_button.sm_button):
 
 # Main menu scene
 game.scenes[1].add_text(
-   sm_text.sm_text(
-       "Main Menu",
-       310,
-       10,
-       pygame.font.SysFont("arial", 42),
-       (255, 255, 255),
-   )
+    sm_text.sm_text(
+        "Main Menu",
+        310,
+        10,
+        pygame.font.SysFont("arial", 42),
+        (255, 255, 255),
+    )
 )
 
 game.scenes[1].add_button(
@@ -102,9 +110,23 @@ game.scenes[0].add_player(
     sm_player.sm_player(
         (256 * 64) // 2,
         (256 * 64) // 2,
+        6,
         "textures/sprites/player.png",
     )
 )
+
+# generate tilemap with checkerboard pattern
+tilemap = [[(x + y) % 2 for x in range(MAP_SIZE)] for y in range(MAP_SIZE)]
+
+tiles = [
+    pygame.image.load("textures/map/brick_wall.png").convert_alpha(),  # 1
+]
+
+# Ensure correct size
+tiles = [pygame.transform.scale(t, (TILE_SIZE, TILE_SIZE)) for t in tiles]
+
+game.scenes[0].add_map(tilemap, tiles)
+
 
 # inventory scene
 game.scenes[2].add_text(

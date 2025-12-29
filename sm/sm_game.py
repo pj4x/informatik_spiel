@@ -15,6 +15,8 @@ class sm_game:
         HEIGHT,
         name,
         FPS,
+        TILE_SIZE=64,
+        cam_scroll_style=0,
     ):
         # initialise pygame
         pygame.init()
@@ -22,6 +24,9 @@ class sm_game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption(name)
         self.clock = pygame.time.Clock()
+        self.cam_scroll_style = cam_scroll_style
+        if TILE_SIZE:
+            self.TILE_SIZE = TILE_SIZE
 
     def change_scene(self, index):
         self.current_scene = index
@@ -32,6 +37,48 @@ class sm_game:
     def draw_current_scene(self):
         # draw player and enemies if current scene is game scene
         if self.scenes[self.current_scene].is_game_scene:
+            # draw tilemap
+            start_col = (
+                self.scenes[self.current_scene].camera.rect.left // self.TILE_SIZE
+            )
+            end_col = (
+                self.scenes[self.current_scene].camera.rect.right // self.TILE_SIZE + 1
+            )
+
+            start_row = (
+                self.scenes[self.current_scene].camera.rect.top // self.TILE_SIZE
+            )
+            end_row = (
+                self.scenes[self.current_scene].camera.rect.bottom // self.TILE_SIZE + 1
+            )
+
+            for row in range(start_row, end_row):
+                if row < 0 or row >= len(self.scenes[self.current_scene].tilemap):
+                    continue
+
+                for col in range(start_col, end_col):
+                    if col < 0 or col >= len(
+                        self.scenes[self.current_scene].tilemap[row]
+                    ):
+                        continue
+
+                    tile_id = (
+                        self.scenes[self.current_scene].tilemap[row][col] - 1
+                    )  # subtract 1 so that tile_id 0 is empty tile
+                    if tile_id < 0:
+                        continue
+
+                    world_x = col * self.TILE_SIZE
+                    world_y = row * self.TILE_SIZE
+
+                    screen_x, screen_y = self.scenes[
+                        self.current_scene
+                    ].camera.apply_pos((world_x, world_y))
+                    self.screen.blit(
+                        self.scenes[self.current_scene].tileset[tile_id],
+                        (screen_x, screen_y),
+                    )
+
             # draw enemies
             # TODO
 
@@ -52,7 +99,7 @@ class sm_game:
             pass
 
         try:
-        # draw buttons
+            # draw buttons
             for i in self.scenes[self.current_scene].buttons:
                 pygame.draw.rect(self.screen, i.color, (i.x, i.y, i.WIDTH, i.HEIGHT))
                 text_surface = i.font.render(i.text, True, i.f_color)
@@ -69,9 +116,11 @@ class sm_game:
     def update(self):
         # run update functions for scene and player if current scene is game scene
         if self.scenes[self.current_scene].is_game_scene:
-            self.scenes[self.current_scene].player.update(self.dt)
+            # only update player when camera isnt moving
+            if not self.scenes[self.current_scene].camera.lock_player:
+                self.scenes[self.current_scene].player.update()
             self.scenes[self.current_scene].update()
             self.scenes[self.current_scene].camera.update(
                 self.scenes[self.current_scene].player,
-                self.dt
+                self.cam_scroll_style,
             )

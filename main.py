@@ -3,28 +3,33 @@ import sys
 import pygame
 
 # import setup of classes and window
-import setup
+import dungeon_crawler
 
-
-while setup.running:
+while dungeon_crawler.running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            setup.running = False
+            dungeon_crawler.running = False
 
         # send mouse button down to check buttons of current scene
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # 1 = left mouse button
-                setup.game.scenes[setup.game.current_scene].check_buttons(event.pos)
+                dungeon_crawler.game.scenes[
+                    dungeon_crawler.game.current_scene
+                ].check_buttons(event.pos)
 
     # Updates
-    setup.game.update()
+    dungeon_crawler.game.update()
 
     # Drawing
-    setup.game.screen.fill(setup.game.scenes[setup.game.current_scene].bg_color)
-    setup.game.draw_current_scene()
+    dungeon_crawler.game.screen.fill(
+        dungeon_crawler.game.scenes[dungeon_crawler.game.current_scene].bg_color
+    )
+    dungeon_crawler.game.draw_current_scene()
 
     pygame.display.flip()
-    setup.game.dt = setup.game.clock.tick(setup.FPS) >> 10
+    dungeon_crawler.game.dt = (
+        dungeon_crawler.game.clock.tick(dungeon_crawler.FPS) / 1000
+    )
 
 pygame.quit()
 sys.exit()
