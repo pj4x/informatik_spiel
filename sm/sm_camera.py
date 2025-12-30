@@ -8,17 +8,23 @@ class sm_camera:
         height,
         SCREEN_WIDTH,
         SCREEN_HEIGHT,
+        scroll_l=15,
     ):
         self.rect = pygame.Rect(0, 0, width, height)
         self.width = width
         self.height = height
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
         self.SCREEN_WIDTH = SCREEN_WIDTH
+        self.scroll_length = scroll_l
         self.first_update = True
         self.scroll_up = False
         self.scroll_down = False
         self.scroll_left = False
         self.scroll_right = False
+        self.scroll_up_counter = 0
+        self.scroll_down_counter = 0
+        self.scroll_left_counter = 0
+        self.scroll_right_counter = 0
         self.lock_player = False
 
     def apply(self, target_rect):
@@ -36,43 +42,48 @@ class sm_camera:
         # IMPORTANT: start from current position
         x, y = self.rect.topleft
 
-        if self.first_update:
-            x = target.rect.centerx - self.SCREEN_WIDTH // 2
-            y = target.rect.centery - self.SCREEN_HEIGHT // 2
-            self.first_update = False
+        target_s = self.apply(target.rect)  # s stands for screenspace
+        c_target_s = self.apply_pos(
+            (target.rect.centerx, target.rect.centery)
+        )  # c stands for center
 
         if scroll_style == 0:
             x = target.rect.centerx - self.SCREEN_WIDTH // 2
             y = target.rect.centery - self.SCREEN_HEIGHT // 2
 
         elif scroll_style == 1:
-            inc_y = (self.SCREEN_HEIGHT + 37) // 15
-            inc_x = (self.SCREEN_WIDTH + 37) // 15
-
+            # scroll camera
             if self.scroll_up:
-                if (target.rect.centery - self.rect.y) < (-5 + inc_y * 15):
-                    y -= inc_y
+                if self.scroll_up_counter < self.scroll_length:
+                    y -= (self.SCREEN_HEIGHT - 32) // self.scroll_length
+                    self.scroll_up_counter += 1
                 else:
                     self.scroll_up = False
-
+                    self.scroll_up_counter = 0
             elif self.scroll_down:
-                if (target.rect.centery - self.rect.y) > 37:
-                    y += inc_y
+                if self.scroll_down_counter < self.scroll_length:
+                    y += (self.SCREEN_HEIGHT - 32) // self.scroll_length
+                    self.scroll_down_counter += 1
                 else:
                     self.scroll_down = False
+                    self.scroll_down_counter = 0
 
             if self.scroll_left:
-                if (target.rect.centerx - self.rect.x) < (-5 + inc_x * 15):
-                    x -= inc_x
+                if self.scroll_left_counter < self.scroll_length:
+                    x -= (self.SCREEN_WIDTH - 32) // self.scroll_length
+                    self.scroll_left_counter += 1
                 else:
                     self.scroll_left = False
-
+                    self.scroll_left_counter = 0
             elif self.scroll_right:
-                if (target.rect.centerx - self.rect.x) > 37:
-                    x += inc_x
+                if self.scroll_right_counter < self.scroll_length:
+                    x += (self.SCREEN_WIDTH - 32) // self.scroll_length
+                    self.scroll_right_counter += 1
                 else:
                     self.scroll_right = False
+                    self.scroll_right_counter = 0
 
+            # disable player movement lock when scrolling is done
             if not (
                 self.scroll_up
                 or self.scroll_down
@@ -81,21 +92,34 @@ class sm_camera:
             ):
                 self.lock_player = False
 
+            # check if camera needs to be scrolled
+            #
+            # 5 pixels more than center to avoid accidental scrolling
             if not (self.scroll_up or self.scroll_down):
-                if (target.rect.centery - self.rect.y) <= -5:
+                if c_target_s[1] <= -5:
                     self.scroll_up = True
                     self.lock_player = True
-                elif (target.rect.centery - self.rect.y) >= self.SCREEN_HEIGHT + 5:
+                elif c_target_s[1] >= self.SCREEN_HEIGHT + 5:
                     self.scroll_down = True
                     self.lock_player = True
 
             if not (self.scroll_left or self.scroll_right):
-                if (target.rect.centerx - self.rect.x) <= -5:
+                if c_target_s[0] <= -5:
                     self.scroll_left = True
                     self.lock_player = True
-                elif (target.rect.centerx - self.rect.x) >= self.SCREEN_WIDTH + 5:
+                elif c_target_s[0] >= self.SCREEN_WIDTH + 5:
                     self.scroll_right = True  # FIXED
                     self.lock_player = True
+
+        if self.first_update:
+            x = target.rect.centerx - self.SCREEN_WIDTH // 2
+            y = target.rect.centery - self.SCREEN_HEIGHT // 2
+            self.first_update = False
+            self.scroll_up = False
+            self.scroll_down = False
+            self.scroll_left = False
+            self.scroll_right = False
+            self.lock_player = False
 
         x = max(0, min(x, self.width - self.SCREEN_WIDTH))
         y = max(0, min(y, self.height - self.SCREEN_HEIGHT))
