@@ -1,3 +1,4 @@
+import random
 import sys
 
 import pygame
@@ -115,8 +116,55 @@ game.scenes[0].add_player(
     )
 )
 
-# generate tilemap with checkerboard pattern
-tilemap = [[(x // 4) % 2 for x in range(MAP_SIZE)] for y in range(MAP_SIZE)]
+
+# Start with all walls
+tilemap = [[1 for _ in range(MAP_SIZE)] for _ in range(MAP_SIZE)]
+
+
+def carve_block(x, y):
+    """Carve a 2x2 path block"""
+    for dy in (0, 1):
+        for dx in (0, 1):
+            if 0 <= x + dx < MAP_SIZE and 0 <= y + dy < MAP_SIZE:
+                tilemap[y + dy][x + dx] = 0
+
+
+def generate_maze():
+    stack = []
+
+    start_x = random.randrange(1, MAP_SIZE - 2, 4)
+    start_y = random.randrange(1, MAP_SIZE - 2, 4)
+
+    carve_block(start_x, start_y)
+    stack.append((start_x, start_y))
+
+    while stack:
+        x, y = stack[-1]
+
+        directions = [(4, 0), (-4, 0), (0, 4), (0, -4)]
+        random.shuffle(directions)
+
+        carved = False
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+
+            if 1 <= nx < MAP_SIZE - 2 and 1 <= ny < MAP_SIZE - 2:
+                if tilemap[ny][nx] == 1:
+                    # carve corridor
+                    carve_block(x + dx // 2, y + dy // 2)
+                    carve_block(nx, ny)
+                    stack.append((nx, ny))
+                    carved = True
+                    break
+
+        if not carved:
+            stack.pop()
+
+
+generate_maze()
+for y in range(127, 130):
+    for x in range(127, 130):
+        tilemap[y][x] = 0
 
 
 tiles = [
