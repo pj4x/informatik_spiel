@@ -116,7 +116,8 @@ game.scenes[0].add_player(
 )
 
 # generate tilemap with checkerboard pattern
-tilemap = [[(x + y) % 2 for x in range(MAP_SIZE)] for y in range(MAP_SIZE)]
+tilemap = [[(x // 4) % 2 for x in range(MAP_SIZE)] for y in range(MAP_SIZE)]
+
 
 tiles = [
     pygame.image.load("textures/map/brick_wall.png").convert_alpha(),  # 1
@@ -125,7 +126,10 @@ tiles = [
 # Ensure correct size
 tiles = [pygame.transform.scale(t, (TILE_SIZE, TILE_SIZE)) for t in tiles]
 
-game.scenes[0].add_map(tilemap, tiles)
+# tiles with collision
+collides = [1]
+
+game.scenes[0].add_map(tilemap, tiles, collides)
 
 
 # inventory scene

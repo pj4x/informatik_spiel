@@ -1,4 +1,5 @@
 import pygame
+import sm_tilemap
 
 
 class sm_player(pygame.sprite.Sprite):
@@ -20,13 +21,37 @@ class sm_player(pygame.sprite.Sprite):
 
         self.speed = speed
 
-    def update(self):
+    def update(self, tilemap, cld):
+        dx = dy = 0
         keys = pygame.key.get_pressed()
+
         if keys[pygame.K_w]:
-            self.rect.y -= self.speed
+            dy -= self.speed
         if keys[pygame.K_s]:
-            self.rect.y += self.speed
+            dy += self.speed
         if keys[pygame.K_a]:
-            self.rect.x -= self.speed
+            dx -= self.speed
         if keys[pygame.K_d]:
-            self.rect.x += self.speed
+            dx += self.speed
+
+        # ---- X movement ----
+        self.rect.x += dx
+        for tile in sm_tilemap.get_nearby_solid_tiles(
+            self.rect, tilemap, 64, collide=cld
+        ):
+            if self.rect.colliderect(tile):
+                if dx > 0:
+                    self.rect.right = tile.left
+                elif dx < 0:
+                    self.rect.left = tile.right
+
+        # ---- Y movement ----
+        self.rect.y += dy
+        for tile in sm_tilemap.get_nearby_solid_tiles(
+            self.rect, tilemap, 64, collide=cld
+        ):
+            if self.rect.colliderect(tile):
+                if dy > 0:
+                    self.rect.bottom = tile.top
+                elif dy < 0:
+                    self.rect.top = tile.bottom

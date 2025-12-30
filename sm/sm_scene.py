@@ -62,10 +62,11 @@ class sm_scene:
             enemies: list[sm_enemy.sm_enemy] = []
             self.enemies.append(e)
 
-    def add_map(self, tilemap, tileset):
+    def add_map(self, tilemap, tileset, collides):
         if self.is_game_scene:
             self.tilemap = tilemap
             self.tileset = tileset
+            self.collides = collides
         else:
             print("WARNING: cant add tilemap to none game scene")
 

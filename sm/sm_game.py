@@ -118,7 +118,10 @@ class sm_game:
         if self.scenes[self.current_scene].is_game_scene:
             # only update player when camera isnt moving
             if not self.scenes[self.current_scene].camera.lock_player:
-                self.scenes[self.current_scene].player.update()
+                self.scenes[self.current_scene].player.update(
+                    self.scenes[self.current_scene].tilemap,
+                    self.scenes[self.current_scene].collides,
+                )
             self.scenes[self.current_scene].update()
             self.scenes[self.current_scene].camera.update(
                 self.scenes[self.current_scene].player,
