@@ -2,6 +2,7 @@ import pygame
 import sm_button
 import sm_camera
 import sm_enemy
+import sm_icon
 import sm_player
 import sm_text
 
@@ -48,6 +49,13 @@ class sm_scene:
         except:
             self.texts: list[sm_text.sm_text] = []
             self.texts.append(text)
+
+    def add_icon(self, icon: sm_icon.sm_icon):
+        try:
+            self.icons.append(icon)
+        except:
+            self.icons: list[sm_icon.sm_icon] = []
+            self.icons.append(icon)
 
     def add_player(self, p: sm_player.sm_player):
         if self.is_game_scene:

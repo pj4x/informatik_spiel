@@ -9,6 +9,7 @@ sys.path.insert(1, "./sm/")
 import sm_button
 import sm_enemy
 import sm_game
+import sm_icon
 import sm_player
 import sm_scene
 import sm_text
@@ -264,17 +265,14 @@ for i in range(4):
     )
 
 # player icon
-game.scenes[2].add_button(
-    sm_button.sm_button(
-        190,
-        260,
+# TODO change image
+game.scenes[2].add_icon(
+    sm_icon.sm_icon(
         40,
         80,
-        "Picture from player",
-        (105, 105, 105),
-        pygame.font.SysFont("arial", 24),
-        (0, 0, 0),
-        btn_action,
+        190,
+        260,
+        "textures/sprites/player.png",
     )
 )
 

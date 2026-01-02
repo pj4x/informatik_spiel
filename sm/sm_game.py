@@ -98,8 +98,8 @@ class sm_game:
         except:
             pass
 
+        # draw buttons
         try:
-            # draw buttons
             for i in self.scenes[self.current_scene].buttons:
                 pygame.draw.rect(self.screen, i.color, (i.x, i.y, i.WIDTH, i.HEIGHT))
                 text_surface = i.font.render(i.text, True, i.f_color)
@@ -110,6 +110,13 @@ class sm_game:
                         i.y + i.HEIGHT // 2 - text_surface.get_height() // 2,
                     ),
                 )
+        except:
+            pass
+
+        # draw icons
+        try:
+            for i in self.scenes[self.current_scene].icons:
+                self.screen.blit(i.image, (i.x, i.y))
         except:
             pass
 
