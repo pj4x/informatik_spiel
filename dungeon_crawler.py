@@ -184,8 +184,8 @@ game.scenes[0].add_map(tilemap, tiles, collides)
 game.scenes[2].add_text(
     sm_text.sm_text(
         "Inventory",
-        310,
-        10,
+        300,
+        5,
         pygame.font.SysFont("arial", 42),
         (255, 255, 255),
     )
@@ -193,9 +193,9 @@ game.scenes[2].add_text(
 
 
 game.scenes[2].add_text(
-   sm_text.sm_text(
+    sm_text.sm_text(
         "Storage",
-        550,
+        535,
         40,
         pygame.font.SysFont("arial", 24),
         (255, 255, 255),
@@ -203,23 +203,25 @@ game.scenes[2].add_text(
 )
 
 game.scenes[2].add_text(
-   sm_text.sm_text(
-        "Player Equitment",
-        100,
+    sm_text.sm_text(
+        "Player Equipement",
+        40,
         40,
         pygame.font.SysFont("arial", 24),
         (255, 255, 255),
     )
 )
 
-for i in range(380,800,70):
-    for j in range(80,570,70):
+
+# inventory storage
+for i in range(6):
+    for j in range(7):
         game.scenes[2].add_button(
             sm_button.sm_button(
                 50,
                 50,
-                i,
-                j,
+                380 + (i * 70),
+                80 + (j * 70),
                 "",
                 (105, 105, 105),
                 pygame.font.SysFont("arial", 42),
@@ -228,13 +230,15 @@ for i in range(380,800,70):
             )
         )
 
-for i in range(80,291,70):
+
+# two ability slots
+for i in range(2):
     game.scenes[2].add_button(
         sm_button.sm_button(
             50,
             50,
             250,
-            i,
+            80 + (i * 70),
             "",
             (105, 105, 105),
             pygame.font.SysFont("arial", 42),
@@ -243,39 +247,14 @@ for i in range(80,291,70):
         )
     )
 
-game.scenes[2].add_button(
-        sm_button.sm_button(
-            50,
-            50,
-            40,
-            430,
-            "",
-            (105, 105, 105),
-            pygame.font.SysFont("arial", 42),
-            (0, 0, 0),
-            btn_action,
-        )
-    )
-game.scenes[2].add_button(
-        sm_button.sm_button(
-            50,
-            50,
-            250,
-            430,
-            "",
-            (105, 105, 105),
-            pygame.font.SysFont("arial", 42),
-            (0, 0, 0),
-            btn_action,
-        )
-    )
-for i in range(40,251,70):
+# four weapon slots
+for i in range(4):
     game.scenes[2].add_button(
         sm_button.sm_button(
             50,
             50,
-            i,
-            500,
+            40 + (i * 70),
+            360,
             "",
             (105, 105, 105),
             pygame.font.SysFont("arial", 42),
@@ -284,20 +263,20 @@ for i in range(40,251,70):
         )
     )
 
-# Platzhalter button
+# player icon
 game.scenes[2].add_button(
-        sm_button.sm_button(
-            190,
-            260,
-            40,
-            80,
-            "Picture from player",
-            (105, 105, 105),
-            pygame.font.SysFont("arial", 24),
-            (0, 0, 0),
-            btn_action,
-        )
+    sm_button.sm_button(
+        190,
+        260,
+        40,
+        80,
+        "Picture from player",
+        (105, 105, 105),
+        pygame.font.SysFont("arial", 24),
+        (0, 0, 0),
+        btn_action,
     )
+)
 
 
 ##################################################################

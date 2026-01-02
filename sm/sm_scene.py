@@ -44,7 +44,7 @@ class sm_scene:
 
     def add_text(self, text: sm_text.sm_text):
         try:
-            self.texts.append(button)
+            self.texts.append(text)
         except:
             self.texts: list[sm_text.sm_text] = []
             self.texts.append(text)
