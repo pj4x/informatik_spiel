@@ -22,6 +22,27 @@ TILE_SIZE = 64
 name = "dungeon crawler"
 running = True
 
+# Variables for inventory
+class selec:
+    storage_slct = -1
+    equip_slct = -1
+    armor_slct = -1
+
+    def change_strg(self,x):
+        self.storage_slct = x
+    
+    def change_equip(self,x):
+        self.equip_slct = x
+    
+    def change_armor(self,x):
+        self.armor_slct = x
+
+btn_selects = selec()
+
+storage_btns = []
+armor_btns = []
+equip_btns = []
+
 
 ##################################################################
 # Initialise classes and tilemap
@@ -42,17 +63,53 @@ game.add_scene(sm_scene.sm_scene(game.screen, (30, 30, 30), "inv", is_game_scene
 game.change_scene(1)
 
 
-def btn_action(b: sm_button.sm_button):
+def btn_game(b: sm_button.sm_button, pos):
     game.change_scene(0)
 
+def btn_menu(b: sm_button.sm_button, pos):
+    game.change_scene(1)
 
-def btn_quit(b: sm_button.sm_button):
+
+def btn_quit(b: sm_button.sm_button, pos):
     pygame.quit()
     sys.exit()
 
 
-def btn_inv(b: sm_button.sm_button):
+def btn_inv(b: sm_button.sm_button, pos):
     game.change_scene(2)
+
+def btn_storage(b: sm_button.sm_button, pos):
+    for i in range(len(storage_btns)):
+        if (
+            storage_btns[i][0] <= pos[0]
+            and storage_btns[i][0] + 50 >= pos[0]
+            and storage_btns[i][1] <= pos[1]
+            and storage_btns[i][1] + 50 >= pos[1]
+        ):
+            btn_selects.change_strg(i)
+            break
+
+def btn_armor(b: sm_button.sm_button, pos):
+    for i in range(len(armor_btns)):
+        if (
+            armor_btns[i][0] <= pos[0]
+            and armor_btns[i][0] + 50 >= pos[0]
+            and armor_btns[i][1] <= pos[1]
+            and armor_btns[i][1] +50 >= pos[1]
+        ):
+            btn_selects.change_armor(i)
+            break
+
+def btn_equip(b: sm_button.sm_button, pos):
+    for i in range(len(equip_btns)):
+        if (
+            equip_btns[i][0] <= pos[0]
+            and equip_btns[i][0] + 50 >= pos[0]
+            and equip_btns[i][1] <= pos[1]
+            and equip_btns[i][1] +50 >= pos[1]
+        ):
+            btn_selects.change_equip(i)
+            break
 
 
 # Main menu scene
@@ -76,7 +133,7 @@ game.scenes[1].add_button(
         (32, 220, 35),
         pygame.font.SysFont("arial", 42),
         (0, 0, 0),
-        btn_action,
+        btn_game,
     )
 )
 game.scenes[1].add_button(
@@ -227,12 +284,13 @@ for i in range(6):
                 (105, 105, 105),
                 pygame.font.SysFont("arial", 42),
                 (0, 0, 0),
-                btn_action,
+                btn_storage,
             )
         )
+        storage_btns.append((380 + (i * 70),80 + (j * 70)))
 
 
-# two ability slots
+# two armor slots
 for i in range(2):
     game.scenes[2].add_button(
         sm_button.sm_button(
@@ -244,11 +302,12 @@ for i in range(2):
             (105, 105, 105),
             pygame.font.SysFont("arial", 42),
             (0, 0, 0),
-            btn_action,
+            btn_armor,
         )
     )
+    armor_btns.append((250,80 + (i * 70)))
 
-# four weapon slots
+# four equip slots
 for i in range(4):
     game.scenes[2].add_button(
         sm_button.sm_button(
@@ -260,9 +319,10 @@ for i in range(4):
             (105, 105, 105),
             pygame.font.SysFont("arial", 42),
             (0, 0, 0),
-            btn_action,
+            btn_equip,
         )
     )
+    equip_btns.append((40 + (i * 70),360))
 
 # player icon
 # TODO change image
@@ -273,6 +333,20 @@ game.scenes[2].add_icon(
         190,
         260,
         "textures/sprites/player.png",
+    )
+)
+
+game.scenes[2].add_button(
+    sm_button.sm_button(
+        190,
+        50,
+        40,
+        500,
+        "Back to Main Menu",
+        (0,255,0),
+        pygame.font.SysFont("arial", 20),
+        (0,0,0),
+        btn_menu,
     )
 )
 

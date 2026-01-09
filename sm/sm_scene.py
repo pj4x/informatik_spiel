@@ -90,6 +90,6 @@ class sm_scene:
                     and i.y <= pos[1]
                     and i.y + i.HEIGHT >= pos[1]
                 ):
-                    i.action(i)
+                    i.action(i, pos)
         except:
             pass

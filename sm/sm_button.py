@@ -25,5 +25,5 @@ class sm_button:
         if action:
             self.action = action
 
-    def action(self):
+    def action(self, pos):
         print("WARNING: Button has no action attached")
