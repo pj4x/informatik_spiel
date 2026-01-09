@@ -94,7 +94,11 @@ def btn_storage(b: sm_button.sm_button, pos):
             and storage_btns[i][1] <= pos[1]
             and storage_btns[i][1] + 50 >= pos[1]
         ):
-            btn_selects.change_strg(i)
+            # select or unselect
+            if btn_selects.storage_slct == i:
+                btn_selects.change_strg(-1)
+            else:
+                btn_selects.change_strg(i)
             break
 
 
@@ -106,7 +110,11 @@ def btn_armor(b: sm_button.sm_button, pos):
             and armor_btns[i][1] <= pos[1]
             and armor_btns[i][1] + 50 >= pos[1]
         ):
-            btn_selects.change_armor(i)
+            # select or unselect
+            if btn_selects.armor_slct == i:
+                btn_selects.change_armor(-1)
+            else:
+                btn_selects.change_armor(i)
             break
 
 
@@ -118,7 +126,11 @@ def btn_equip(b: sm_button.sm_button, pos):
             and equip_btns[i][1] <= pos[1]
             and equip_btns[i][1] + 50 >= pos[1]
         ):
-            btn_selects.change_equip(i)
+            # select or unselect
+            if btn_selects.equip_slct == i:
+                btn_selects.change_equip(-1)
+            else:
+                btn_selects.change_equip(i)
             break
 
 
