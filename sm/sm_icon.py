@@ -8,9 +8,9 @@ class sm_icon:
         y,
         width,
         height,
-        image_path,
+        image,
     ):
         self.x = x
         self.y = y
-        self.image = pygame.image.load(image_path).convert_alpha()
+        self.image = image
         self.image = pygame.transform.scale(self.image, (width, height))

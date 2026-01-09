@@ -22,20 +22,22 @@ TILE_SIZE = 64
 name = "dungeon crawler"
 running = True
 
+
 # Variables for inventory
 class selec:
     storage_slct = -1
     equip_slct = -1
     armor_slct = -1
 
-    def change_strg(self,x):
+    def change_strg(self, x):
         self.storage_slct = x
-    
-    def change_equip(self,x):
+
+    def change_equip(self, x):
         self.equip_slct = x
-    
-    def change_armor(self,x):
+
+    def change_armor(self, x):
         self.armor_slct = x
+
 
 btn_selects = selec()
 
@@ -54,6 +56,10 @@ game = sm_game.sm_game(
 )
 
 
+# TODO load item data from db
+# placeholder array
+
+
 # adding scenes to main scene array
 game.add_scene(sm_scene.sm_scene(game.screen, (30, 30, 30), "test", is_game_scene=True))
 game.add_scene(
@@ -65,6 +71,7 @@ game.change_scene(1)
 
 def btn_game(b: sm_button.sm_button, pos):
     game.change_scene(0)
+
 
 def btn_menu(b: sm_button.sm_button, pos):
     game.change_scene(1)
@@ -78,6 +85,7 @@ def btn_quit(b: sm_button.sm_button, pos):
 def btn_inv(b: sm_button.sm_button, pos):
     game.change_scene(2)
 
+
 def btn_storage(b: sm_button.sm_button, pos):
     for i in range(len(storage_btns)):
         if (
@@ -89,16 +97,18 @@ def btn_storage(b: sm_button.sm_button, pos):
             btn_selects.change_strg(i)
             break
 
+
 def btn_armor(b: sm_button.sm_button, pos):
     for i in range(len(armor_btns)):
         if (
             armor_btns[i][0] <= pos[0]
             and armor_btns[i][0] + 50 >= pos[0]
             and armor_btns[i][1] <= pos[1]
-            and armor_btns[i][1] +50 >= pos[1]
+            and armor_btns[i][1] + 50 >= pos[1]
         ):
             btn_selects.change_armor(i)
             break
+
 
 def btn_equip(b: sm_button.sm_button, pos):
     for i in range(len(equip_btns)):
@@ -106,7 +116,7 @@ def btn_equip(b: sm_button.sm_button, pos):
             equip_btns[i][0] <= pos[0]
             and equip_btns[i][0] + 50 >= pos[0]
             and equip_btns[i][1] <= pos[1]
-            and equip_btns[i][1] +50 >= pos[1]
+            and equip_btns[i][1] + 50 >= pos[1]
         ):
             btn_selects.change_equip(i)
             break
@@ -287,7 +297,7 @@ for i in range(6):
                 btn_storage,
             )
         )
-        storage_btns.append((380 + (i * 70),80 + (j * 70)))
+        storage_btns.append((380 + (i * 70), 80 + (j * 70)))
 
 
 # two armor slots
@@ -305,7 +315,7 @@ for i in range(2):
             btn_armor,
         )
     )
-    armor_btns.append((250,80 + (i * 70)))
+    armor_btns.append((250, 80 + (i * 70)))
 
 # four equip slots
 for i in range(4):
@@ -322,7 +332,7 @@ for i in range(4):
             btn_equip,
         )
     )
-    equip_btns.append((40 + (i * 70),360))
+    equip_btns.append((40 + (i * 70), 360))
 
 # player icon
 # TODO change image
@@ -332,7 +342,7 @@ game.scenes[2].add_icon(
         80,
         190,
         260,
-        "textures/sprites/player.png",
+        pygame.image.load("textures/sprites/player.png").convert_alpha(),
     )
 )
 
@@ -343,9 +353,9 @@ game.scenes[2].add_button(
         40,
         500,
         "Back to Main Menu",
-        (0,255,0),
+        (0, 255, 0),
         pygame.font.SysFont("arial", 20),
-        (0,0,0),
+        (0, 0, 0),
         btn_menu,
     )
 )
