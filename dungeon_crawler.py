@@ -57,7 +57,6 @@ game = sm_game.sm_game(
 
 
 # TODO load item data from db
-# placeholder array
 
 
 # adding scenes to main scene array
