@@ -15,8 +15,10 @@ class sm_camera:
         self.height = height
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
         self.SCREEN_WIDTH = SCREEN_WIDTH
-        self.scroll_length = scroll_l
         self.first_update = True
+
+        # for scroll style 1
+        self.scroll_length = scroll_l
         self.scroll_up = False
         self.scroll_down = False
         self.scroll_left = False
@@ -26,6 +28,13 @@ class sm_camera:
         self.scroll_left_counter = 0
         self.scroll_right_counter = 0
         self.lock_player = False
+
+        # for scroll style 2
+        self.lerp_speed = 0.02
+        # deadzone size (box around screen center where camera does NOT move)
+        self.deadzone_width = int(SCREEN_WIDTH*0.1)
+        self.deadzone_height = int(SCREEN_HEIGHT*0.07)
+
 
     def apply(self, target_rect):
         # apply offset to a rect (used for sprites)
@@ -110,6 +119,42 @@ class sm_camera:
                 elif c_target_s[0] >= self.SCREEN_WIDTH + 5:
                     self.scroll_right = True
                     self.lock_player = True
+
+        elif scroll_style == 2:
+            # Deadzone + Lerp smooth follow camera
+
+            cur_x, cur_y = self.rect.topleft
+
+            # screen center in world space
+            screen_center_x = cur_x + self.SCREEN_WIDTH // 2
+            screen_center_y = cur_y + self.SCREEN_HEIGHT // 2
+
+            # deadzone bounds in world space
+            dz_left   = screen_center_x - self.deadzone_width // 2
+            dz_right  = screen_center_x + self.deadzone_width // 2
+            dz_top    = screen_center_y - self.deadzone_height // 2
+            dz_bottom = screen_center_y + self.deadzone_height // 2
+
+            desired_x = cur_x
+            desired_y = cur_y
+
+            # horizontal deadzone check
+            if target.rect.centerx < dz_left:
+                desired_x = target.rect.centerx - self.deadzone_width // 2 - self.SCREEN_WIDTH // 2
+            elif target.rect.centerx > dz_right:
+                desired_x = target.rect.centerx + self.deadzone_width // 2 - self.SCREEN_WIDTH // 2
+
+            # vertical deadzone check
+            if target.rect.centery < dz_top:
+                desired_y = target.rect.centery - self.deadzone_height // 2 - self.SCREEN_HEIGHT // 2
+            elif target.rect.centery > dz_bottom:
+                desired_y = target.rect.centery + self.deadzone_height // 2 - self.SCREEN_HEIGHT // 2
+
+            # lerp towards desired position
+            x = cur_x + (desired_x - cur_x) * self.lerp_speed
+            y = cur_y + (desired_y - cur_y) * self.lerp_speed
+
+
 
         if self.first_update:
             x = target.rect.centerx - self.SCREEN_WIDTH // 2

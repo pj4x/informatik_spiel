@@ -56,7 +56,7 @@ inv = sm_load.load_inventory("data/data.db")
 
 # dont actually need to provide tile size since we use standard(64), but for consistency sake
 game = sm_game.sm_game(
-    WIDTH, HEIGHT, name, FPS, TILE_SIZE=TILE_SIZE, cam_scroll_style=1
+    WIDTH, HEIGHT, name, FPS, TILE_SIZE=TILE_SIZE, cam_scroll_style=2
 )
 
 empty_texture = pygame.image.load("textures/icons/empty.png").convert_alpha()
