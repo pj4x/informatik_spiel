@@ -108,7 +108,7 @@ class sm_camera:
                     self.scroll_left = True
                     self.lock_player = True
                 elif c_target_s[0] >= self.SCREEN_WIDTH + 5:
-                    self.scroll_right = True  # FIXED
+                    self.scroll_right = True
                     self.lock_player = True
 
         if self.first_update:

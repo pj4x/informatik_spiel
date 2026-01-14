@@ -17,7 +17,7 @@ import sm_scene
 import sm_text
 
 # Initialise constants
-WIDTH, HEIGHT = 800, 600
+WIDTH, HEIGHT = 1280, 720
 FPS = 60
 MAP_SIZE = 256
 TILE_SIZE = 64
@@ -66,7 +66,6 @@ items = sm_load.load_items_from_db("data/data.db")
 
 # load textures for items
 for i in items:
-    print(i.image)
     i.image = pygame.image.load(i.image).convert_alpha()
 
 # adding scenes to main scene array
@@ -195,7 +194,7 @@ game.scenes[1].add_button(
 )
 
 
-# test scene
+
 game.scenes[0].add_player(
     sm_player.sm_player(
         (256 * 64) // 2,

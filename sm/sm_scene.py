@@ -28,7 +28,7 @@ class sm_scene:
             self.update = update
         self.is_game_scene = is_game_scene
         if is_game_scene:
-            self.camera = sm_camera.sm_camera(256 * 64, 256 * 64, 800, 600)
+            self.camera = sm_camera.sm_camera(256 * 64, 256 * 64, 1280, 720)
 
     def update(self):
         pass
