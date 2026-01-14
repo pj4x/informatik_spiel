@@ -1,7 +1,3 @@
-- Datenbank laden
-- Hauptmenü
-- Dungeon Generator
-- Player Controller
-- (Texturen)
+- Dungeon Generator (labyrinth ja; kisten & gegner nein)
 - Kampfsystem (basic, wenn mehr zeit komplexer)
--tomte
+- Inventar in Datenbank speichern
