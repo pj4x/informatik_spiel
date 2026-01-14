@@ -31,11 +31,11 @@ while dungeon_crawler.running:
     if dungeon_crawler.game.current_scene == 2:
         # draw selected in inv
         if dungeon_crawler.btn_selects.storage_slct >= 0:
-            pygame.draw.rect(dungeon_crawler.game.screen, (0,255,0), (dungeon_crawler.storage_btns[dungeon_crawler.btn_selects.storage_slct][0]-1,dungeon_crawler.storage_btns[dungeon_crawler.btn_selects.storage_slct][1]-1, 52, 52), width=1,)
+            pygame.draw.rect(dungeon_crawler.game.screen, (0,255,0), (dungeon_crawler.storage_btns[dungeon_crawler.btn_selects.storage_slct][0]-2,dungeon_crawler.storage_btns[dungeon_crawler.btn_selects.storage_slct][1]-2, 54, 54), width=1,)
         if dungeon_crawler.btn_selects.equip_slct >= 0:
-            pygame.draw.rect(dungeon_crawler.game.screen, (0,255,0), (dungeon_crawler.equip_btns[dungeon_crawler.btn_selects.equip_slct][0]-1,dungeon_crawler.equip_btns[dungeon_crawler.btn_selects.equip_slct][1]-1, 52, 52), width=1,)
+            pygame.draw.rect(dungeon_crawler.game.screen, (0,255,0), (dungeon_crawler.equip_btns[dungeon_crawler.btn_selects.equip_slct][0]-2,dungeon_crawler.equip_btns[dungeon_crawler.btn_selects.equip_slct][1]-2, 54, 54), width=1,)
         if dungeon_crawler.btn_selects.armor_slct >= 0:
-            pygame.draw.rect(dungeon_crawler.game.screen, (0,255,0), (dungeon_crawler.armor_btns[dungeon_crawler.btn_selects.armor_slct][0]-1,dungeon_crawler.storage_btns[dungeon_crawler.btn_selects.armor_slct][1]-1, 52, 52), width=1,)
+            pygame.draw.rect(dungeon_crawler.game.screen, (0,255,0), (dungeon_crawler.armor_btns[dungeon_crawler.btn_selects.armor_slct][0]-2,dungeon_crawler.storage_btns[dungeon_crawler.btn_selects.armor_slct][1]-2, 54, 54), width=1,)
 
 
         # deselect if armor and equip slots are selected

@@ -146,8 +146,8 @@ def btn_equip(b: sm_button.sm_button, pos):
 game.scenes[1].add_text(
     sm_text.sm_text(
         "Main Menu",
-        310,
-        10,
+        int(330*1.6),
+        int(10*1.2),
         pygame.font.SysFont("arial", 42),
         (255, 255, 255),
     )
@@ -155,10 +155,10 @@ game.scenes[1].add_text(
 
 game.scenes[1].add_button(
     sm_button.sm_button(
-        400,
-        100,
-        200,
-        100,
+        int(1.6*400),
+        int(1.2*100),
+        int(1.6*200),
+        int(1.2*100),
         "Play",
         (32, 220, 35),
         pygame.font.SysFont("arial", 42),
@@ -168,10 +168,10 @@ game.scenes[1].add_button(
 )
 game.scenes[1].add_button(
     sm_button.sm_button(
-        400,
-        100,
-        200,
-        250,
+        int(1.6*400),
+        int(1.2*100),
+        int(1.6*200),
+        int(1.2*250),
         "Inventory",
         (100, 0, 0),
         pygame.font.SysFont("arial", 42),
@@ -181,10 +181,10 @@ game.scenes[1].add_button(
 )
 game.scenes[1].add_button(
     sm_button.sm_button(
-        400,
-        100,
-        200,
-        400,
+        int(1.6*400),
+        int(1.2*100),
+        int(1.6*200),
+        int(1.2*400),
         "Quit Game",
         (136, 136, 255),
         pygame.font.SysFont("arial", 42),
@@ -272,8 +272,8 @@ game.scenes[0].add_map(tilemap, tiles, collides)
 game.scenes[2].add_text(
     sm_text.sm_text(
         "Inventory",
-        300,
-        5,
+        int(1.6*300),
+        int(1.2*5),
         pygame.font.SysFont("arial", 42),
         (255, 255, 255),
     )
@@ -283,8 +283,8 @@ game.scenes[2].add_text(
 game.scenes[2].add_text(
     sm_text.sm_text(
         "Storage",
-        535,
-        40,
+        int(1.6*535),
+        int(1.2*40),
         pygame.font.SysFont("arial", 24),
         (255, 255, 255),
     )
@@ -293,8 +293,8 @@ game.scenes[2].add_text(
 game.scenes[2].add_text(
     sm_text.sm_text(
         "Player Equipement",
-        40,
-        40,
+        int(1.6*40),
+        int(1.2*40),
         pygame.font.SysFont("arial", 24),
         (255, 255, 255),
     )
@@ -308,8 +308,8 @@ for i in range(6):
             sm_button.sm_button(
                 50,
                 50,
-                380 + (i * 70),
-                80 + (j * 70),
+                int(1.6*380 + (i * 70)),
+                int(1.2*80 + (j * 70)),
                 "",
                 (105, 105, 105),
                 pygame.font.SysFont("arial", 42),
@@ -325,14 +325,14 @@ for i in range(6):
 
         game.scenes[2].add_icon(
             sm_icon.sm_icon(
-                380 + (i * 70),
-                80 + (j * 70),
+                int(1.6*380 + (i * 70)),
+                int(1.2*80 + (j * 70)),
                 50,
                 50,
                 img
             )
         )
-        storage_btns.append((380 + (i * 70), 80 + (j * 70)))
+        storage_btns.append((int(1.6*380 + (i * 70)), int(1.2*80 + (j * 70))))
 
 
 # two armor slots
@@ -341,8 +341,8 @@ for i in range(2):
         sm_button.sm_button(
             50,
             50,
-            250,
-            80 + (i * 70),
+            int(1.6*250),
+            int(1.2*80 + (i * 70)),
             "",
             (105, 105, 105),
             pygame.font.SysFont("arial", 42),
@@ -357,14 +357,14 @@ for i in range(2):
 
     game.scenes[2].add_icon(
         sm_icon.sm_icon(
-            250,
-            80 + (i * 70),
+            int(1.6*250),
+            int(1.2*80 + (i * 70)),
             50,
             50,
             img
         )
     )
-    armor_btns.append((250, 80 + (i * 70)))
+    armor_btns.append((int(1.6*250), int(1.2*80 + (i * 70))))
 
 # four equip slots
 for i in range(4):
@@ -372,8 +372,8 @@ for i in range(4):
         sm_button.sm_button(
             50,
             50,
-            40 + (i * 70),
-            360,
+            int(1.6*40 + (i * 70)),
+            int(1.2*360),
             "",
             (105, 105, 105),
             pygame.font.SysFont("arial", 42),
@@ -389,21 +389,21 @@ for i in range(4):
 
     game.scenes[2].add_icon(
         sm_icon.sm_icon(
-            40 + (i * 70),
-            360,
+            int(1.6*40 + (i * 70)),
+            int(1.2*360),
             50,
             50,
             img
         )
     )
-    equip_btns.append((40 + (i * 70), 360))
+    equip_btns.append((int(1.6*40 + (i * 70)), int(1.2*360)))
 
 # player icon
 # TODO change image
 game.scenes[2].add_icon(
     sm_icon.sm_icon(
-        40,
-        80,
+        int(1.6*40),
+        int(1.2*80),
         190,
         260,
         pygame.image.load("textures/sprites/player.png").convert_alpha(),
@@ -414,8 +414,8 @@ game.scenes[2].add_button(
     sm_button.sm_button(
         190,
         50,
-        40,
-        500,
+        int(1.6*40),
+        int(1.2*500),
         "Back to Main Menu",
         (0, 255, 0),
         pygame.font.SysFont("arial", 20),
