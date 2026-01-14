@@ -10,6 +10,8 @@ import sm_button
 import sm_enemy
 import sm_game
 import sm_icon
+import sm_item
+import sm_load
 import sm_player
 import sm_scene
 import sm_text
@@ -45,6 +47,8 @@ storage_btns = []
 armor_btns = []
 equip_btns = []
 
+inv = sm_load.load_inventory("data/data.db")
+
 
 ##################################################################
 # Initialise classes and tilemap
@@ -55,9 +59,14 @@ game = sm_game.sm_game(
     WIDTH, HEIGHT, name, FPS, TILE_SIZE=TILE_SIZE, cam_scroll_style=1
 )
 
+empty_texture = pygame.image.load("textures/icons/empty.png").convert_alpha()
 
-# TODO load item data from db
+# load item data from db
+items = sm_load.load_items_from_db("data/data.db")
 
+# load textures for items
+for i in items:
+    i.image = pygame.image.load(i.image).convert_alpha()
 
 # adding scenes to main scene array
 game.add_scene(sm_scene.sm_scene(game.screen, (30, 30, 30), "test", is_game_scene=True))
@@ -308,6 +317,21 @@ for i in range(6):
                 btn_storage,
             )
         )
+        # set texture of icon to item in that slot
+        index = (i * 7) + j
+        img = empty_texture
+        if inv[0][index] > -1 and inv[0][index] < len(items):
+            img = items[inv[0][index]].image
+
+        game.scenes[2].add_icon(
+            sm_icon.sm_icon(
+                380 + (i * 70),
+                80 + (j * 70),
+                50,
+                50,
+                img
+            )
+        )
         storage_btns.append((380 + (i * 70), 80 + (j * 70)))
 
 
@@ -326,6 +350,20 @@ for i in range(2):
             btn_armor,
         )
     )
+    # set texture
+    img = empty_texture
+    if inv[1][i] > -1 and inv[1][i] < len(items):
+        img = items[inv[0][i]].image
+
+    game.scenes[2].add_icon(
+        sm_icon.sm_icon(
+            250,
+            80 + (i * 70),
+            50,
+            50,
+            img
+        )
+    )
     armor_btns.append((250, 80 + (i * 70)))
 
 # four equip slots
@@ -341,6 +379,21 @@ for i in range(4):
             pygame.font.SysFont("arial", 42),
             (0, 0, 0),
             btn_equip,
+        )
+    )
+    # set textures
+    # set texture
+    img = empty_texture
+    if inv[2][i] > -1 and inv[2][i] < len(items):
+        img = items[inv[0][i]].image
+
+    game.scenes[2].add_icon(
+        sm_icon.sm_icon(
+            40 + (i * 70),
+            360,
+            50,
+            50,
+            img
         )
     )
     equip_btns.append((40 + (i * 70), 360))

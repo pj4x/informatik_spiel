@@ -1,17 +1,50 @@
 import sqlite3
-import sm_enemy
 
-con = sqlite3.connect("data/data.db")
-cur = con.cursor()
-enemies_number = 0
-query = f"SELECT COUNT(*) FROM enemies"
-cur.execute(query)
-row_count = cur.fetchone()[0]
-lines =  int(row_count)
+import sm_item
 
 
-for i in range(0,lines,1):
-    damage = cur.execute('select damage from enemies where id = 1')
-    hp = cur.execute('select hp from enemies where id = 1')
-    img_path = cur.execute('select img from enemies where id = 1')
-    sm_enemy.sm_enemy(damage,hp,0,0,img_path)
+def load_items_from_db(db_path):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT ID, type, image FROM items")
+    rows = cursor.fetchall()
+
+    items = []
+    for row in rows:
+        item = sm_item.sm_item(ID=row[0], type=row[1], image=row[2])
+        items.append(item)
+
+    conn.close()
+    return items
+
+def load_inventory(db_path):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT ID, ItemID, place, slot FROM inventory")
+    rows = cursor.fetchall()
+
+    storage_ids = [-1] * 42
+    armor_ids = [-1] * 2
+    equip_ids = [-1] * 4
+
+    for row in rows:
+        # check place and slot to put into correct slot in inventory
+        if row[2] == 0:
+            if row[3] < 42:
+                storage_ids[row[3]] = row[1]
+            else:
+                print("WARNING: invalid data in db")
+        elif row[2] == 1:
+            if row[3] < 2:
+                armor_ids[row[3]] = row[1]
+            else:
+                print("WARNING: invalid data in db")
+        elif row[2] == 2:
+            if row[3] < 4:
+                equip_ids[row[3]] = row[1]
+            else:
+                print("WARNING: invalid data in db")
+
+    return (storage_ids, armor_ids, equip_ids)
