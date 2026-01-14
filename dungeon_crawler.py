@@ -66,6 +66,7 @@ items = sm_load.load_items_from_db("data/data.db")
 
 # load textures for items
 for i in items:
+    print(i.image)
     i.image = pygame.image.load(i.image).convert_alpha()
 
 # adding scenes to main scene array

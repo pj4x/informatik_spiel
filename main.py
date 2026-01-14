@@ -37,6 +37,11 @@ while dungeon_crawler.running:
         if dungeon_crawler.btn_selects.armor_slct >= 0:
             pygame.draw.rect(dungeon_crawler.game.screen, (0,255,0), (dungeon_crawler.armor_btns[dungeon_crawler.btn_selects.armor_slct][0]-1,dungeon_crawler.storage_btns[dungeon_crawler.btn_selects.armor_slct][1]-1, 52, 52), width=1,)
 
+
+        # deselect if armor and equip slots are selected
+        if dungeon_crawler.btn_selects.armor_slct >= 0 and dungeon_crawler.btn_selects.equip_slct >= 0:
+            dungeon_crawler.btn_selects.change_equip(-1)
+            dungeon_crawler.btn_selects.change_armor(-1)
         # switch items in inventory if two are selected
         # switch storage and armor slot
         if dungeon_crawler.btn_selects.storage_slct >= 0 and dungeon_crawler.btn_selects.armor_slct >= 0:
@@ -47,22 +52,28 @@ while dungeon_crawler.running:
                    dungeon_crawler.inv[0][dungeon_crawler.btn_selects.storage_slct] = dungeon_crawler.inv[1][dungeon_crawler.btn_selects.armor_slct]
                    dungeon_crawler.inv[1][dungeon_crawler.btn_selects.armor_slct] = temp
                    # change pictures
+                   temp = dungeon_crawler.game.scenes[2].icons[dungeon_crawler.btn_selects.storage_slct].image
+                   dungeon_crawler.game.scenes[2].icons[dungeon_crawler.btn_selects.storage_slct].image = dungeon_crawler.game.scenes[2].icons[42+dungeon_crawler.btn_selects.armor_slct].image
+                   dungeon_crawler.game.scenes[2].icons[42+dungeon_crawler.btn_selects.armor_slct].image = temp
                    # unselect
-                   dungeon_crawler.btn_selects.storage_slct = -1
-                   dungeon_crawler.btn_selects.armor_slct = -1
+                   dungeon_crawler.btn_selects.change_strg(-1)
+                   dungeon_crawler.btn_selects.change_armor(-1)
                else:
                    # cant put non armor item in armor slot
                    # unselect
-                   dungeon_crawler.btn_selects.storage_slct = -1
-                   dungeon_crawler.btn_selects.armor_slct = -1
+                   dungeon_crawler.btn_selects.change_strg(-1)
+                   dungeon_crawler.btn_selects.change_armor(-1)
             else:
                 # change IDs
                 dungeon_crawler.inv[0][dungeon_crawler.btn_selects.storage_slct] = dungeon_crawler.inv[1][dungeon_crawler.btn_selects.armor_slct]
                 dungeon_crawler.inv[1][dungeon_crawler.btn_selects.armor_slct] = -1
                 # change pictures
+                temp = dungeon_crawler.game.scenes[2].icons[dungeon_crawler.btn_selects.storage_slct].image
+                dungeon_crawler.game.scenes[2].icons[dungeon_crawler.btn_selects.storage_slct].image = dungeon_crawler.game.scenes[2].icons[42+dungeon_crawler.btn_selects.armor_slct].image
+                dungeon_crawler.game.scenes[2].icons[42+dungeon_crawler.btn_selects.armor_slct].image = temp
                 # unselect
-                dungeon_crawler.btn_selects.storage_slct = -1
-                dungeon_crawler.btn_selects.armor_slct = -1
+                dungeon_crawler.btn_selects.change_strg(-1)
+                dungeon_crawler.btn_selects.change_armor(-1)
 
         # switch storage and equip
         if dungeon_crawler.btn_selects.storage_slct >= 0 and dungeon_crawler.btn_selects.equip_slct >= 0:
@@ -73,22 +84,28 @@ while dungeon_crawler.running:
                    dungeon_crawler.inv[0][dungeon_crawler.btn_selects.storage_slct] = dungeon_crawler.inv[2][dungeon_crawler.btn_selects.equip_slct]
                    dungeon_crawler.inv[2][dungeon_crawler.btn_selects.equip_slct] = temp
                    # change pictures
+                   temp = dungeon_crawler.game.scenes[2].icons[dungeon_crawler.btn_selects.storage_slct].image
+                   dungeon_crawler.game.scenes[2].icons[dungeon_crawler.btn_selects.storage_slct].image = dungeon_crawler.game.scenes[2].icons[44+dungeon_crawler.btn_selects.equip_slct].image
+                   dungeon_crawler.game.scenes[2].icons[44+dungeon_crawler.btn_selects.equip_slct].image = temp
                    # unselect
-                   dungeon_crawler.btn_selects.storage_slct = -1
-                   dungeon_crawler.btn_selects.equip_slct = -1
+                   dungeon_crawler.btn_selects.change_strg(-1)
+                   dungeon_crawler.btn_selects.change_equip(-1)
                 else:
                    # cant put non equip item in equip slot
                    # unselect
-                   dungeon_crawler.btn_selects.storage_slct = -1
-                   dungeon_crawler.btn_selects.equip_slct = -1
+                   dungeon_crawler.btn_selects.change_strg(-1)
+                   dungeon_crawler.btn_selects.change_equip(-1)
             else:
                 # change IDs
                 dungeon_crawler.inv[0][dungeon_crawler.btn_selects.storage_slct] = dungeon_crawler.inv[2][dungeon_crawler.btn_selects.equip_slct]
                 dungeon_crawler.inv[2][dungeon_crawler.btn_selects.equip_slct] = -1
                 # change pictures
+                temp = dungeon_crawler.game.scenes[2].icons[dungeon_crawler.btn_selects.storage_slct].image
+                dungeon_crawler.game.scenes[2].icons[dungeon_crawler.btn_selects.storage_slct].image = dungeon_crawler.game.scenes[2].icons[44+dungeon_crawler.btn_selects.equip_slct].image
+                dungeon_crawler.game.scenes[2].icons[44+dungeon_crawler.btn_selects.equip_slct].image = temp
                 # unselect
-                dungeon_crawler.btn_selects.storage_slct = -1
-                dungeon_crawler.btn_selects.equip_slct = -1
+                dungeon_crawler.btn_selects.change_strg(-1)
+                dungeon_crawler.btn_selects.change_equip(-1)
 
 
     pygame.display.flip()

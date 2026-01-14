@@ -67,7 +67,7 @@ class sm_scene:
         try:
             self.enemies.append(e)
         except:
-            enemies: list[sm_enemy.sm_enemy] = []
+            self.enemies: list[sm_enemy.sm_enemy] = []
             self.enemies.append(e)
 
     def add_map(self, tilemap, tileset, collides):
