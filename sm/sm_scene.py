@@ -63,7 +63,7 @@ class sm_scene:
         else:
             print("WARNING: cant add player to none game scene")
 
-    def add_enemy(self, e: sm_enemy):
+    def add_enemy(self, e: sm_enemy.sm_enemy):
         try:
             self.enemies.append(e)
         except:
