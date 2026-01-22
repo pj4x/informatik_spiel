@@ -48,3 +48,26 @@ def load_inventory(db_path):
                 print("WARNING: invalid data in db")
 
     return (storage_ids, armor_ids, equip_ids)
+
+def store_inventory(db_path, storage_ids, armor_ids, equip_ids):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # empty table before inserting new data
+    cursor.execute("DELETE FROM inventory WHERE ID = *")
+
+    ID = 0
+    for i in range(len(storage_ids)):
+        if not storage_ids[i] == -1:
+            cursor.execute(f"INSERT INTO inventory (ID, ItemID, place, slot) VALUES ({ID}, {storage_ids[i]}, 0, {i});")
+        ID += 1
+    
+    for i in range(len(armor_ids)):
+        if not armor_ids[i] == -1:
+            cursor.execute(f"INSERT INTO inventory (ID, ItemID, place, slot) VALUES ({ID}, {armor_ids[i]}, 1, {i});")
+        ID += 1
+    
+    for i in range(len(equip_ids)):
+        if not equip_ids[i] == -1:
+            cursor.execute(f"INSERT INTO inventory (ID, ItemID, place, slot) VALUES ({ID}, {equip_ids[i]}, 2, {i});")
+        ID += 1
