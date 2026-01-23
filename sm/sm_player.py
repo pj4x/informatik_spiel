@@ -33,6 +33,7 @@ class sm_player(pygame.sprite.Sprite):
             dx -= self.speed
         if keys[pygame.K_d]:
             dx += self.speed
+    
 
         # ---- X movement ----
         self.rect.x += dx
@@ -55,3 +56,10 @@ class sm_player(pygame.sprite.Sprite):
                     self.rect.bottom = tile.top
                 elif dy < 0:
                     self.rect.top = tile.bottom
+
+
+        if keys[pygame.K_e]:
+            for tile in sm_tilemap.get_nearby_solid_tiles(self.rect, tilemap, 64, collide=cld):
+                if tilemap[tile.y // 64][tile.x // 64] == 2:
+                    print(tile.y," ", tile.x)
+                    tilemap[tile.y // 64][tile.x // 64] = 0

@@ -257,16 +257,41 @@ for y in range(127, 130):
 
 tiles = [
     pygame.image.load("textures/map/brick_wall.png").convert_alpha(),  # 1
+    pygame.image.load("textures/map/chest.png").convert_alpha(), # 2
+    pygame.image.load("textures/map/exit.png").convert_alpha(), # 3
 ]
 
 # Ensure correct size
 tiles = [pygame.transform.scale(t, (TILE_SIZE, TILE_SIZE)) for t in tiles]
 
 # tiles with collision
-collides = [1]
+collides = [1,2,3]
+
+# tiles with chest
+chest = 1000
+for i in range(chest):
+    x = 0
+    y = 0
+    while tilemap[x][y] == 1:
+        x = random.randint(0,255)
+        y = random.randint(0,255)
+        if tilemap[x][y] == 0:
+            tilemap[x][y] = 2
+
+#exit tile
+exits = 20
+for i in range(exits):
+    x = random.randint(10,245)
+    y = random.randint(10,245)
+    for i in range(3):
+        for j in range(3):
+            tilemap[y+i][x+j] = 0
+    tilemap[y+1][x+1] = 3
+
+
+
 
 game.scenes[0].add_map(tilemap, tiles, collides)
-
 
 # inventory scene
 game.scenes[2].add_text(
