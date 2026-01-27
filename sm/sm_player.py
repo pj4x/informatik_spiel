@@ -63,3 +63,8 @@ class sm_player(pygame.sprite.Sprite):
                 if tilemap[tile.y // 64][tile.x // 64] == 2:
                     print(tile.y," ", tile.x)
                     tilemap[tile.y // 64][tile.x // 64] = 0
+
+        if keys[pygame.K_e]:
+            for tile in sm_tilemap.get_nearby_solid_tiles(self.rect, tilemap, 64, collide=cld):
+                if tilemap[tile.y // 64][tile.x // 64] == 23:
+                    print(extraction)
