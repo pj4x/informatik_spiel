@@ -29,6 +29,8 @@ class sm_enemy(pygame.sprite.Sprite):
         self.frame_timer = 0
         self.attacking = False
 
+        self.hit = False
+
         # Store loaded sprite sheets (each with 4 frames)
         self.sprites = {}
 
@@ -141,6 +143,8 @@ class sm_enemy(pygame.sprite.Sprite):
             self.current_direction = direction
 
     def update(self, dt):
+        if self.hit:
+            self.hit = False
         # Update animation frame
         self.frame_timer += dt
 
@@ -156,6 +160,8 @@ class sm_enemy(pygame.sprite.Sprite):
                 if self.current_action == "attack":
                     self.attacking = False
                     self.set_action("idle")  # Return to idle after attack
+            if self.animation_frame == 2 and self.current_action == "attack":
+                self.hit = True
 
         # Update the current image
         self.image = self.get_current_frame()
@@ -255,7 +261,7 @@ class sm_enemy(pygame.sprite.Sprite):
                     self.state = 0
 
             elif self.state == 2:  # attack
-                self.attack()
                 # Go back to chase if player moves out of attack range
                 if distance > attack_range:
                     self.state = 1
+                self.attack()

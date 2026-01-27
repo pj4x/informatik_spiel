@@ -1,4 +1,4 @@
-from enum import EnumDict
+import math
 
 import pygame
 import sm_scene
@@ -29,6 +29,8 @@ class sm_game:
         self.cam_scroll_style = cam_scroll_style
         if TILE_SIZE:
             self.TILE_SIZE = TILE_SIZE
+
+        self.sound_hit = pygame.mixer.Sound("sound_effects/hitHurt.wav")
 
     def change_scene(self, index):
         self.current_scene = index
@@ -175,6 +177,16 @@ class sm_game:
                     # Update enemy animation and ai
                     enemy.ai(self.scenes[self.current_scene].player.rect.topleft)
                     enemy.update(self.dt)
+                    if enemy.hit:
+                        distance = math.hypot(
+                            self.scenes[self.current_scene].player.rect.topleft[0]
+                            - enemy.x,
+                            self.scenes[self.current_scene].player.rect.topleft[1]
+                            - enemy.y,
+                        )
+                        if distance <= 64:
+                            self.scenes[self.current_scene].player.hp -= enemy.damage
+                            self.sound_hit.play()
             # only update player when camera isnt moving
             if not self.scenes[self.current_scene].camera.lock_player:
                 self.scenes[self.current_scene].player.update(

@@ -68,6 +68,9 @@ game = sm_game.sm_game(
     WIDTH, HEIGHT, name, FPS, TILE_SIZE=TILE_SIZE, cam_scroll_style=2
 )
 
+# load sounds
+sound_select = pygame.mixer.Sound("sound_effects/blipSelect.wav")
+
 empty_texture = pygame.image.load("textures/icons/empty.png").convert_alpha()
 
 # load item data from db
@@ -90,6 +93,7 @@ game.change_scene(1)
 
 
 def btn_game(b: sm_button.sm_button, pos):
+    sound_select.play()
     game.change_scene(0)
     for i in range(4):
         if inv.inv[2][i] > -1:
@@ -101,6 +105,7 @@ def btn_game(b: sm_button.sm_button, pos):
 
 
 def btn_menu(b: sm_button.sm_button, pos):
+    sound_select.play()
     game.change_scene(1)
     sm_load.store_inventory("data/data.db", inv.inv[0], inv.inv[1], inv.inv[2])
 
@@ -111,6 +116,7 @@ def btn_quit(b: sm_button.sm_button, pos):
 
 
 def btn_inv(b: sm_button.sm_button, pos):
+    sound_select.play()
     game.change_scene(2)
     inv.change_inv(sm_load.load_inventory("data/data.db"))
     for i in range(42):
@@ -137,6 +143,7 @@ def btn_inv(b: sm_button.sm_button, pos):
 
 
 def btn_storage(b: sm_button.sm_button, pos):
+    sound_select.play()
     for i in range(len(storage_btns)):
         if (
             storage_btns[i][0] <= pos[0]
@@ -153,6 +160,7 @@ def btn_storage(b: sm_button.sm_button, pos):
 
 
 def btn_armor(b: sm_button.sm_button, pos):
+    sound_select.play()
     for i in range(len(armor_btns)):
         if (
             armor_btns[i][0] <= pos[0]
@@ -169,6 +177,7 @@ def btn_armor(b: sm_button.sm_button, pos):
 
 
 def btn_equip(b: sm_button.sm_button, pos):
+    sound_select.play()
     for i in range(len(equip_btns)):
         if (
             equip_btns[i][0] <= pos[0]
@@ -241,6 +250,7 @@ game.scenes[0].add_player(
         (256 * 64) // 2,
         (256 * 64) // 2,
         6,
+        30,
         "textures/sprites/player.png",
     )
 )
@@ -309,7 +319,7 @@ tiles = [pygame.transform.scale(t, (TILE_SIZE, TILE_SIZE)) for t in tiles]
 collides = [1, 2, 3]
 
 # tiles with chest
-for i in range(1000):
+for i in range(500):
     x = 0
     y = 0
     while tilemap[x][y] == 1:
@@ -317,7 +327,16 @@ for i in range(1000):
         y = random.randint(0, 255)
         if tilemap[x][y] == 0:
             tilemap[x][y] = 2
-            # game.scenes[0].add_enemy(e)
+            game.scenes[0].add_enemy(
+                sm_enemy.sm_enemy(
+                    enemies[0][0],
+                    enemies[0][1],
+                    x * TILE_SIZE,
+                    y * TILE_SIZE,
+                    enemies[0][2],
+                )
+            )
+
 
 # exit tile
 for i in range(20):
@@ -330,16 +349,6 @@ for i in range(20):
 
 
 game.scenes[0].add_map(tilemap, tiles, collides)
-
-game.scenes[0].add_enemy(
-    sm_enemy.sm_enemy(
-        enemies[0][0],
-        enemies[0][1],
-        (256 * 64) // 2,
-        (256 * 64) // 2,
-        enemies[0][2],
-    )
-)
 
 for i in range(4):
     img = empty_texture

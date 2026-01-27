@@ -8,6 +8,7 @@ class sm_player(pygame.sprite.Sprite):
         x,
         y,
         speed,
+        hp,
         image_path,
     ):
         super().__init__()
@@ -21,6 +22,9 @@ class sm_player(pygame.sprite.Sprite):
 
         self.speed = speed
 
+        self.hp = hp
+        self.max_hp = self.hp
+
     def update(self, tilemap, cld):
         dx = dy = 0
         keys = pygame.key.get_pressed()
@@ -33,7 +37,6 @@ class sm_player(pygame.sprite.Sprite):
             dx -= self.speed
         if keys[pygame.K_d]:
             dx += self.speed
-    
 
         # ---- X movement ----
         self.rect.x += dx
@@ -57,14 +60,17 @@ class sm_player(pygame.sprite.Sprite):
                 elif dy < 0:
                     self.rect.top = tile.bottom
 
-
         if keys[pygame.K_e]:
-            for tile in sm_tilemap.get_nearby_solid_tiles(self.rect, tilemap, 64, collide=cld):
+            for tile in sm_tilemap.get_nearby_solid_tiles(
+                self.rect, tilemap, 64, collide=cld
+            ):
                 if tilemap[tile.y // 64][tile.x // 64] == 2:
-                    print(tile.y," ", tile.x)
+                    print(tile.y, " ", tile.x)
                     tilemap[tile.y // 64][tile.x // 64] = 0
 
         if keys[pygame.K_e]:
-            for tile in sm_tilemap.get_nearby_solid_tiles(self.rect, tilemap, 64, collide=cld):
+            for tile in sm_tilemap.get_nearby_solid_tiles(
+                self.rect, tilemap, 64, collide=cld
+            ):
                 if tilemap[tile.y // 64][tile.x // 64] == 23:
                     print(extraction)
