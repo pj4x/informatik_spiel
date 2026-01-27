@@ -91,6 +91,13 @@ game.change_scene(1)
 
 def btn_game(b: sm_button.sm_button, pos):
     game.change_scene(0)
+    for i in range(4):
+        if inv.inv[2][i] > -1:
+            game.scenes[0].icons[i].image = pygame.transform.scale(
+                items[inv.inv[2][i]].image, (50, 50)
+            )
+        else:
+            game.scenes[0].icons[i].image = empty_texture
 
 
 def btn_menu(b: sm_button.sm_button, pos):
@@ -324,10 +331,24 @@ for i in range(20):
 
 game.scenes[0].add_map(tilemap, tiles, collides)
 
-e = enemies[0]
-e.x = (256 * 64) // 2
-e.y = (256 * 64) // 2
-game.scenes[0].add_enemy(e)
+game.scenes[0].add_enemy(
+    sm_enemy.sm_enemy(
+        enemies[0][0],
+        enemies[0][1],
+        (256 * 64) // 2,
+        (256 * 64) // 2,
+        enemies[0][2],
+    )
+)
+
+for i in range(4):
+    img = empty_texture
+    if inv.inv[2][i] > -1 and inv.inv[2][i] < len(items):
+        img = items[inv.inv[2][i]].image
+
+    game.scenes[0].add_icon(
+        sm_icon.sm_icon((WIDTH // 2 - 260) + (i * 70), HEIGHT - 70, 50, 50, img)
+    )
 
 # inventory scene
 game.scenes[2].add_text(
@@ -410,7 +431,7 @@ for i in range(2):
     # set texture
     img = empty_texture
     if inv.inv[1][i] > -1 and inv.inv[1][i] < len(items):
-        img = items[inv.inv[0][i]].image
+        img = items[inv.inv[1][i]].image
 
     game.scenes[2].add_icon(
         sm_icon.sm_icon(int(1.6 * 250), int(1.2 * 80 + (i * 70)), 50, 50, img)
@@ -432,11 +453,10 @@ for i in range(4):
             btn_equip,
         )
     )
-    # set textures
     # set texture
     img = empty_texture
     if inv.inv[2][i] > -1 and inv.inv[2][i] < len(items):
-        img = items[inv.inv[0][i]].image
+        img = items[inv.inv[2][i]].image
 
     game.scenes[2].add_icon(
         sm_icon.sm_icon(int(1.6 * 40 + (i * 70)), int(1.2 * 360), 50, 50, img)

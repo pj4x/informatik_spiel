@@ -206,7 +206,6 @@ class sm_enemy(pygame.sprite.Sprite):
         return self.animation_frame == 0 and self.frame_timer == 0
 
     def ai(self, player_pos):
-        print(self.state)
         # Update AI counter to limit how often AI logic runs
         self.ai_update_counter += 1
         if self.ai_update_counter < 10:  # update AI every 10 frames

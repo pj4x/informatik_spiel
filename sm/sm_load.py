@@ -1,6 +1,5 @@
 import sqlite3
 
-import sm_enemy
 import sm_item
 
 
@@ -30,7 +29,11 @@ def load_enemies_from_db(db_path):
     enemies = []
     for row in rows:
         enemies.append(
-            sm_enemy.sm_enemy(damage=row[1], hp=row[2], x=0, y=0, img_root_path=row[3])
+            (
+                row[1],
+                row[2],
+                row[3],
+            )
         )
 
     conn.close()
