@@ -90,6 +90,8 @@ class sm_game:
                     )
                     # Draw enemy at screen position
                     self.screen.blit(enemy.image, enemy_screen_pos)
+                    # draw enemy health bar
+                    self.draw_enemy_health_bar(enemy, enemy_screen_pos)
 
             # draw player
             self.screen.blit(
@@ -128,6 +130,41 @@ class sm_game:
                 self.screen.blit(i.image, (i.x, i.y))
         except:
             pass
+
+    def draw_enemy_health_bar(self, enemy, screen_pos):
+        if enemy.hp <= 0:
+            return
+
+        # Health bar dimensions
+        bar_width = 40
+        bar_height = 4
+        border_thickness = 1
+
+        # Calculate health percentage
+        health_percentage = enemy.hp / enemy.max_hp
+
+        # Health bar position (above the enemy)
+        bar_x = screen_pos[0] + 12  # center above enemy
+        bar_y = screen_pos[1] - bar_height - 2  # 2 pixels above enemy
+
+        # Draw border
+        border_rect = pygame.Rect(
+            bar_x - border_thickness,
+            bar_y - border_thickness,
+            bar_width + 2 * border_thickness,
+            bar_height + 2 * border_thickness,
+        )
+        pygame.draw.rect(self.screen, (0, 0, 0), border_rect)
+
+        # Draw background (empty health)
+        background_rect = pygame.Rect(bar_x, bar_y, bar_width, bar_height)
+        pygame.draw.rect(self.screen, (255, 0, 0), background_rect)
+
+        # Draw current health
+        health_width = int(bar_width * health_percentage)
+        if health_width > 0:
+            health_rect = pygame.Rect(bar_x, bar_y, health_width, bar_height)
+            pygame.draw.rect(self.screen, (0, 255, 0), health_rect)
 
     def update(self):
         # run update functions for scene and player if current scene is game scene

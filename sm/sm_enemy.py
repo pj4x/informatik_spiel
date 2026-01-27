@@ -17,6 +17,7 @@ class sm_enemy(pygame.sprite.Sprite):
 
         self.damage = damage
         self.hp = hp
+        self.max_hp = hp
         self.x = x
         self.y = y
 
@@ -154,7 +155,6 @@ class sm_enemy(pygame.sprite.Sprite):
                 # Check if attack animation completed one cycle
                 if self.current_action == "attack":
                     self.attacking = False
-                    self.state = 1
                     self.set_action("idle")  # Return to idle after attack
 
         # Update the current image
@@ -206,6 +206,7 @@ class sm_enemy(pygame.sprite.Sprite):
         return self.animation_frame == 0 and self.frame_timer == 0
 
     def ai(self, player_pos):
+        print(self.state)
         # Update AI counter to limit how often AI logic runs
         self.ai_update_counter += 1
         if self.ai_update_counter < 10:  # update AI every 10 frames
@@ -221,42 +222,41 @@ class sm_enemy(pygame.sprite.Sprite):
         # Define detection and attack ranges
         detection_range = 300
         attack_range = 50
+        if not self.attacking:
+            if self.state == 0:  # idle
+                # Random walk
+                if random.randint(0, 100) < 20:  # small chance to move
+                    self.move(
+                        random.choice([-20, -10, 0, 10, 20]),
+                        random.choice([-20, -10, 0, 10, 20]),
+                    )
+                else:
+                    self.set_action("idle")
 
-        if self.state == 0:  # idle
-            # Random walk
-            if random.randint(0, 100) < 20:  # small chance to move
-                self.move(
-                    random.choice([-20, -10, 0, 10, 20]),
-                    random.choice([-20, -10, 0, 10, 20]),
-                )
-            else:
-                self.set_action("idle")
+                # Transition to chase if player is close
+                if distance <= detection_range:
+                    self.state = 1
 
-            # Transition to chase if player is close
-            if distance <= detection_range:
-                self.state = 1
+            elif self.state == 1:  # go to player
+                # Move towards player
+                speed = 10
+                if distance != 0:
+                    move_x = speed * dx / distance
+                    move_y = speed * dy / distance
+                    self.move(move_x, move_y)
+                else:
+                    self.move(0, 0)
 
-        elif self.state == 1:  # go to player
-            # Move towards player
-            speed = 10
-            if distance != 0:
-                move_x = speed * dx / distance
-                move_y = speed * dy / distance
-                self.move(move_x, move_y)
-            else:
-                self.move(0, 0)
+                # Switch to attack if close enough
+                if distance <= attack_range:
+                    self.state = 2
+                # Go back to idle if player moves far away
+                elif distance > detection_range:
+                    self.set_action("idle")
+                    self.state = 0
 
-            # Switch to attack if close enough
-            if distance <= attack_range:
-                self.state = 2
-            # Go back to idle if player moves far away
-            elif distance > detection_range:
-                self.set_action("idle")
-                self.state = 0
-
-        elif self.state == 2:  # attack
-            self.attack()
-            self.state = -1  # no state until attack animation is done
-            # Go back to chase if player moves out of attack range
-            if distance > attack_range:
-                self.state = 1
+            elif self.state == 2:  # attack
+                self.attack()
+                # Go back to chase if player moves out of attack range
+                if distance > attack_range:
+                    self.state = 1
