@@ -66,6 +66,7 @@ def load_inventory(db_path):
             else:
                 print("WARNING: invalid data in db")
 
+    conn.close()
     return (storage_ids, armor_ids, equip_ids)
 
 
@@ -74,7 +75,7 @@ def store_inventory(db_path, storage_ids, armor_ids, equip_ids):
     cursor = conn.cursor()
 
     # empty table before inserting new data
-    cursor.execute("DELETE FROM inventory WHERE ID = *")
+    cursor.execute("DELETE FROM inventory")
 
     ID = 0
     for i in range(len(storage_ids)):
@@ -97,3 +98,6 @@ def store_inventory(db_path, storage_ids, armor_ids, equip_ids):
                 f"INSERT INTO inventory (ID, ItemID, place, slot) VALUES ({ID}, {equip_ids[i]}, 2, {i});"
             )
         ID += 1
+
+    conn.commit()
+    conn.close()

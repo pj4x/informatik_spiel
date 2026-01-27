@@ -47,7 +47,16 @@ storage_btns = []
 armor_btns = []
 equip_btns = []
 
-inv = sm_load.load_inventory("data/data.db")
+
+class inven:
+    inv = []
+
+    def change_inv(self, iv):
+        self.inv = iv
+
+
+inv = inven()
+inv.change_inv(sm_load.load_inventory("data/data.db"))
 
 
 ##################################################################
@@ -86,6 +95,7 @@ def btn_game(b: sm_button.sm_button, pos):
 
 def btn_menu(b: sm_button.sm_button, pos):
     game.change_scene(1)
+    sm_load.store_inventory("data/data.db", inv.inv[0], inv.inv[1], inv.inv[2])
 
 
 def btn_quit(b: sm_button.sm_button, pos):
@@ -95,6 +105,28 @@ def btn_quit(b: sm_button.sm_button, pos):
 
 def btn_inv(b: sm_button.sm_button, pos):
     game.change_scene(2)
+    inv.change_inv(sm_load.load_inventory("data/data.db"))
+    for i in range(42):
+        if inv.inv[0][i] > -1:
+            game.scenes[2].icons[i].image = pygame.transform.scale(
+                items[inv.inv[0][i]].image, (50, 50)
+            )
+        else:
+            game.scenes[2].icons[i].image = empty_texture
+    for i in range(2):
+        if inv.inv[1][i] > -1:
+            game.scenes[2].icons[42 + i].image = pygame.transform.scale(
+                items[inv.inv[1][i]].image, (50, 50)
+            )
+        else:
+            game.scenes[2].icons[42 + i].image = empty_texture
+    for i in range(4):
+        if inv.inv[2][i] > -1:
+            game.scenes[2].icons[44 + i].image = pygame.transform.scale(
+                items[inv.inv[2][i]].image, (50, 50)
+            )
+        else:
+            game.scenes[2].icons[44 + i].image = empty_texture
 
 
 def btn_storage(b: sm_button.sm_button, pos):
@@ -349,8 +381,8 @@ for i in range(6):
         # set texture of icon to item in that slot
         index = (i * 7) + j
         img = empty_texture
-        if inv[0][index] > -1 and inv[0][index] < len(items):
-            img = items[inv[0][index]].image
+        if inv.inv[0][index] > -1 and inv.inv[0][index] < len(items):
+            img = items[inv.inv[0][index]].image
 
         game.scenes[2].add_icon(
             sm_icon.sm_icon(
@@ -377,8 +409,8 @@ for i in range(2):
     )
     # set texture
     img = empty_texture
-    if inv[1][i] > -1 and inv[1][i] < len(items):
-        img = items[inv[0][i]].image
+    if inv.inv[1][i] > -1 and inv.inv[1][i] < len(items):
+        img = items[inv.inv[0][i]].image
 
     game.scenes[2].add_icon(
         sm_icon.sm_icon(int(1.6 * 250), int(1.2 * 80 + (i * 70)), 50, 50, img)
@@ -403,8 +435,8 @@ for i in range(4):
     # set textures
     # set texture
     img = empty_texture
-    if inv[2][i] > -1 and inv[2][i] < len(items):
-        img = items[inv[0][i]].image
+    if inv.inv[2][i] > -1 and inv.inv[2][i] < len(items):
+        img = items[inv.inv[0][i]].image
 
     game.scenes[2].add_icon(
         sm_icon.sm_icon(int(1.6 * 40 + (i * 70)), int(1.2 * 360), 50, 50, img)
