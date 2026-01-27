@@ -24,6 +24,7 @@ class sm_game:
         pygame.init()
         pygame.font.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.width, self.height = WIDTH, HEIGHT
         pygame.display.set_caption(name)
         self.clock = pygame.time.Clock()
         self.cam_scroll_style = cam_scroll_style
@@ -31,6 +32,7 @@ class sm_game:
             self.TILE_SIZE = TILE_SIZE
 
         self.sound_hit = pygame.mixer.Sound("sound_effects/hitHurt.wav")
+        self.sound_explode = pygame.mixer.Sound("sound_effects/explosion.wav")
 
     def change_scene(self, index):
         self.current_scene = index
@@ -86,6 +88,8 @@ class sm_game:
             # draw enemies
             if hasattr(self.scenes[self.current_scene], "enemies"):
                 for enemy in self.scenes[self.current_scene].enemies:
+                    if enemy.hp <= 0:
+                        continue
                     # Apply camera offset to enemy position
                     enemy_screen_pos = self.scenes[self.current_scene].camera.apply_pos(
                         (enemy.x, enemy.y)
@@ -95,12 +99,18 @@ class sm_game:
                     # draw enemy health bar
                     self.draw_enemy_health_bar(enemy, enemy_screen_pos)
 
-            # draw player
-            self.screen.blit(
-                self.scenes[self.current_scene].player.image,
-                self.scenes[self.current_scene].camera.apply(
-                    self.scenes[self.current_scene].player.rect
-                ),
+            # draw player if alive
+            if self.scenes[self.current_scene].player_alive:
+                self.screen.blit(
+                    self.scenes[self.current_scene].player.image,
+                    self.scenes[self.current_scene].camera.apply(
+                        self.scenes[self.current_scene].player.rect
+                    ),
+                )
+            # draw player health bar
+            self.draw_player_health_bar(
+                self.scenes[self.current_scene].player.hp,
+                self.scenes[self.current_scene].player.max_hp,
             )
 
         # draw texts
@@ -168,16 +178,55 @@ class sm_game:
             health_rect = pygame.Rect(bar_x, bar_y, health_width, bar_height)
             pygame.draw.rect(self.screen, (0, 255, 0), health_rect)
 
+    def draw_player_health_bar(self, hp, max_hp):
+        # Health bar dimensions
+        bar_width = 200
+        bar_height = 50
+        border_thickness = 3
+
+        # Calculate health percentage
+        health_percentage = hp / max_hp
+
+        # Health bar position (above the enemy)
+        bar_x = 30
+        bar_y = self.height - 70
+
+        # Draw border
+        border_rect = pygame.Rect(
+            bar_x - border_thickness,
+            bar_y - border_thickness,
+            bar_width + 2 * border_thickness,
+            bar_height + 2 * border_thickness,
+        )
+        pygame.draw.rect(self.screen, (0, 0, 0), border_rect)
+
+        # Draw background (empty health)
+        background_rect = pygame.Rect(bar_x, bar_y, bar_width, bar_height)
+        pygame.draw.rect(self.screen, (255, 0, 0), background_rect)
+
+        # Draw current health
+        health_width = int(bar_width * health_percentage)
+        if health_width > 0:
+            health_rect = pygame.Rect(bar_x, bar_y, health_width, bar_height)
+            pygame.draw.rect(self.screen, (0, 255, 0), health_rect)
+
     def update(self):
         # run update functions for scene and player if current scene is game scene
         if self.scenes[self.current_scene].is_game_scene:
             # Update enemies if scene has enemies
             if hasattr(self.scenes[self.current_scene], "enemies"):
                 for enemy in self.scenes[self.current_scene].enemies:
+                    if enemy.hp <= 0:
+                        continue
                     # Update enemy animation and ai
-                    enemy.ai(self.scenes[self.current_scene].player.rect.topleft)
+                    #
+                    # give real player position if alive, otherwise very large number
+                    if self.scenes[self.current_scene].player_alive:
+                        enemy.ai(self.scenes[self.current_scene].player.rect.topleft)
+                    else:
+                        enemy.ai((10**20, 10**20))
                     enemy.update(self.dt)
-                    if enemy.hit:
+                    if enemy.hit and self.scenes[self.current_scene].player_alive:
                         distance = math.hypot(
                             self.scenes[self.current_scene].player.rect.topleft[0]
                             - enemy.x,
@@ -187,12 +236,18 @@ class sm_game:
                         if distance <= 64:
                             self.scenes[self.current_scene].player.hp -= enemy.damage
                             self.sound_hit.play()
-            # only update player when camera isnt moving
-            if not self.scenes[self.current_scene].camera.lock_player:
-                self.scenes[self.current_scene].player.update(
-                    self.scenes[self.current_scene].tilemap,
-                    self.scenes[self.current_scene].collides,
-                )
+
+            if self.scenes[self.current_scene].player_alive:
+                if self.scenes[self.current_scene].player.hp <= 0:
+                    self.sound_explode.play()
+                    self.scenes[self.current_scene].player_alive = False
+
+                # only update player when camera isnt moving with scrolling style 1
+                if not self.scenes[self.current_scene].camera.lock_player:
+                    self.scenes[self.current_scene].player.update(
+                        self.scenes[self.current_scene].tilemap,
+                        self.scenes[self.current_scene].collides,
+                    )
             # update scene
             self.scenes[self.current_scene].update()
 

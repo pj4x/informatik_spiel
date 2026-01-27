@@ -1,9 +1,15 @@
+import math
+import os
+import random
 import sys
 
 import pygame
 
 # import setup of classes and window
 import dungeon_crawler
+
+sys.path.insert(1, "./sm/")
+import sm_load
 
 while dungeon_crawler.running:
     for event in pygame.event.get():
@@ -25,6 +31,37 @@ while dungeon_crawler.running:
         dungeon_crawler.game.scenes[dungeon_crawler.game.current_scene].bg_color
     )
     dungeon_crawler.game.draw_current_scene()
+
+    if dungeon_crawler.game.current_scene == 0:
+        # player extraction
+        if dungeon_crawler.game.scenes[0].player.extract:
+            sm_load.store_inventory(
+                "data/data.db",
+                dungeon_crawler.inv.inv[0],
+                dungeon_crawler.inv.inv[1],
+                dungeon_crawler.inv.inv[2],
+            )
+            os.execv(sys.executable, [sys.executable] + sys.argv)
+
+        # player open chest
+        if dungeon_crawler.game.scenes[0].player.give_item:
+            for i in range(42):
+                if dungeon_crawler.inv.inv[0][i] == -1:
+                    item = random.choice(dungeon_crawler.items)
+                    dungeon_crawler.inv.inv[0][i] = item.ID
+                    break
+        dungeon_crawler.game.scenes[0].player.give_item = False
+
+        # player attack
+        if dungeon_crawler.game.scenes[0].player.attack:
+            for enemy in dungeon_crawler.game.scenes[0].enemies:
+                distance = math.hypot(
+                    dungeon_crawler.game.scenes[0].player.rect.topleft[0] - enemy.x,
+                    dungeon_crawler.game.scenes[0].player.rect.topleft[1] - enemy.y,
+                )
+                if distance <= 55:
+                    enemy.hp -= 5
+            dungeon_crawler.game.scenes[0].player.attack = False
 
     # inventory
     if dungeon_crawler.game.current_scene == 2:

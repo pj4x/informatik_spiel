@@ -1,7 +1,7 @@
 import pygame
 
 
-def get_nearby_solid_tiles(player_rect, tilemap, TILE_SIZE, collide=[1]):
+def get_nearby_solid_tiles(player_rect, tilemap, TILE_SIZE, collide=None):
     tiles = []
 
     left = player_rect.left // TILE_SIZE

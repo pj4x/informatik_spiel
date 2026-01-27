@@ -15,7 +15,8 @@ class sm_player(pygame.sprite.Sprite):
 
         # Load the PNG texture with alpha transparency
         self.image = pygame.image.load(image_path).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (64, 64))
+        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.sound_pickup = pygame.mixer.Sound("sound_effects/pickupCoin.wav")
 
         # Rect for positioning
         self.rect = self.image.get_rect(topleft=(x, y))
@@ -24,6 +25,10 @@ class sm_player(pygame.sprite.Sprite):
 
         self.hp = hp
         self.max_hp = self.hp
+        self.extract = False
+        self.give_item = False
+        self.attack = False
+        self.attack_cooldown = 0
 
     def update(self, tilemap, cld):
         dx = dy = 0
@@ -61,16 +66,26 @@ class sm_player(pygame.sprite.Sprite):
                     self.rect.top = tile.bottom
 
         if keys[pygame.K_e]:
+            # chests
             for tile in sm_tilemap.get_nearby_solid_tiles(
                 self.rect, tilemap, 64, collide=cld
             ):
                 if tilemap[tile.y // 64][tile.x // 64] == 2:
-                    print(tile.y, " ", tile.x)
+                    self.sound_pickup.play()
                     tilemap[tile.y // 64][tile.x // 64] = 0
+                    self.give_item = True
 
-        if keys[pygame.K_e]:
+            # extraction point
             for tile in sm_tilemap.get_nearby_solid_tiles(
                 self.rect, tilemap, 64, collide=cld
             ):
-                if tilemap[tile.y // 64][tile.x // 64] == 23:
-                    print(extraction)
+                if tilemap[tile.y // 64][tile.x // 64] == 3:
+                    self.extract = True
+
+        if keys[pygame.K_q]:
+            # attack
+            if self.attack_cooldown >= 15:
+                self.attack = True
+                self.attack_cooldown = 0
+            else:
+                self.attack_cooldown += 1

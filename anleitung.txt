@@ -1,0 +1,6 @@
+W, A, S, D: bewegen
+E: interagieren (kiste öffnen, am extraktionspunkt extrahieren)
+Q: angreifen
+
+Spielprinzip:
+in zufäligg generierte welt gehen, items sammeln, gegner bekämpfen, extrahiern um gesammelte items mitzunehmen

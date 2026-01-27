@@ -1,0 +1,13 @@
+SELECT ID, type, image FROM items
+
+SELECT ID, damage, hp, img FROM enemies
+
+SELECT ID, ItemID, place, slot FROM inventory
+
+DELETE FROM inventory
+
+f"INSERT INTO inventory (ID, ItemID, place, slot) VALUES ({ID}, {storage_ids[i]}, 0, {i});"
+
+f"INSERT INTO inventory (ID, ItemID, place, slot) VALUES ({ID}, {storage_ids[i]}, 1, {i});"
+
+f"INSERT INTO inventory (ID, ItemID, place, slot) VALUES ({ID}, {storage_ids[i]}, 2, {i});"
