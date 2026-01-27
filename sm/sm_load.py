@@ -1,5 +1,6 @@
 import sqlite3
 
+import sm_enemy
 import sm_item
 
 
@@ -17,6 +18,23 @@ def load_items_from_db(db_path):
 
     conn.close()
     return items
+
+
+def load_enemies_from_db(db_path):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT ID, damage, hp, img FROM enemies")
+    rows = cursor.fetchall()
+
+    enemies = []
+    for row in rows:
+        enemies.append(
+            sm_enemy.sm_enemy(damage=row[1], hp=row[2], x=0, y=0, img_root_path=row[3])
+        )
+
+    conn.close()
+    return enemies
 
 
 def load_inventory(db_path):

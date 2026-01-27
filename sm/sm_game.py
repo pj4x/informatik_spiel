@@ -1,3 +1,5 @@
+from enum import EnumDict
+
 import pygame
 import sm_scene
 
@@ -35,7 +37,7 @@ class sm_game:
         self.scenes.append(scene)
 
     def draw_current_scene(self):
-        # draw player and enemies if current scene is game scene
+        # draw player, enemies and tilemap if current scene is game scene
         if self.scenes[self.current_scene].is_game_scene:
             # draw tilemap
             start_col = (
@@ -80,7 +82,14 @@ class sm_game:
                     )
 
             # draw enemies
-            # TODO
+            if hasattr(self.scenes[self.current_scene], "enemies"):
+                for enemy in self.scenes[self.current_scene].enemies:
+                    # Apply camera offset to enemy position
+                    enemy_screen_pos = self.scenes[self.current_scene].camera.apply_pos(
+                        (enemy.x, enemy.y)
+                    )
+                    # Draw enemy at screen position
+                    self.screen.blit(enemy.image, enemy_screen_pos)
 
             # draw player
             self.screen.blit(
@@ -123,13 +132,22 @@ class sm_game:
     def update(self):
         # run update functions for scene and player if current scene is game scene
         if self.scenes[self.current_scene].is_game_scene:
+            # Update enemies if scene has enemies
+            if hasattr(self.scenes[self.current_scene], "enemies"):
+                for enemy in self.scenes[self.current_scene].enemies:
+                    # Update enemy animation and ai
+                    enemy.ai(self.scenes[self.current_scene].player.rect.topleft)
+                    enemy.update(self.dt)
             # only update player when camera isnt moving
             if not self.scenes[self.current_scene].camera.lock_player:
                 self.scenes[self.current_scene].player.update(
                     self.scenes[self.current_scene].tilemap,
                     self.scenes[self.current_scene].collides,
                 )
+            # update scene
             self.scenes[self.current_scene].update()
+
+            # update camera
             self.scenes[self.current_scene].camera.update(
                 self.scenes[self.current_scene].player,
                 self.cam_scroll_style,
