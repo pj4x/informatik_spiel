@@ -1,3 +1,2 @@
-- Dungeon Generator (labyrinth ja; kisten & gegner nein)
+- gegner generieren
 - Kampfsystem (basic, wenn mehr zeit komplexer)
-- Inventar in Datenbank speichern

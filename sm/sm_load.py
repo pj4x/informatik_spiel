@@ -1,5 +1,6 @@
 import sqlite3
 
+import sm_enemy
 import sm_item
 
 
@@ -17,6 +18,23 @@ def load_items_from_db(db_path):
 
     conn.close()
     return items
+
+
+def load_enemies_from_db(db_path):
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT ID, damage, hp, img FROM enemies")
+    rows = cursor.fetchall()
+
+    enemies = []
+    for row in rows:
+        enemies.append(
+            sm_enemy.sm_enemy(damage=row[1], hp=row[2], x=0, y=0, img_root_path=row[3])
+        )
+
+    conn.close()
+    return enemies
 
 
 def load_inventory(db_path):
@@ -48,6 +66,7 @@ def load_inventory(db_path):
             else:
                 print("WARNING: invalid data in db")
 
+    conn.close()
     return (storage_ids, armor_ids, equip_ids)
 
 
@@ -56,7 +75,7 @@ def store_inventory(db_path, storage_ids, armor_ids, equip_ids):
     cursor = conn.cursor()
 
     # empty table before inserting new data
-    cursor.execute("DELETE FROM inventory WHERE ID = *")
+    cursor.execute("DELETE FROM inventory")
 
     ID = 0
     for i in range(len(storage_ids)):
@@ -79,3 +98,6 @@ def store_inventory(db_path, storage_ids, armor_ids, equip_ids):
                 f"INSERT INTO inventory (ID, ItemID, place, slot) VALUES ({ID}, {equip_ids[i]}, 2, {i});"
             )
         ID += 1
+
+    conn.commit()
+    conn.close()

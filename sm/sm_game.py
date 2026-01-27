@@ -1,3 +1,5 @@
+from enum import EnumDict
+
 import pygame
 import sm_scene
 
@@ -35,7 +37,7 @@ class sm_game:
         self.scenes.append(scene)
 
     def draw_current_scene(self):
-        # draw player and enemies if current scene is game scene
+        # draw player, enemies and tilemap if current scene is game scene
         if self.scenes[self.current_scene].is_game_scene:
             # draw tilemap
             start_col = (
@@ -80,7 +82,16 @@ class sm_game:
                     )
 
             # draw enemies
-            # TODO
+            if hasattr(self.scenes[self.current_scene], "enemies"):
+                for enemy in self.scenes[self.current_scene].enemies:
+                    # Apply camera offset to enemy position
+                    enemy_screen_pos = self.scenes[self.current_scene].camera.apply_pos(
+                        (enemy.x, enemy.y)
+                    )
+                    # Draw enemy at screen position
+                    self.screen.blit(enemy.image, enemy_screen_pos)
+                    # draw enemy health bar
+                    self.draw_enemy_health_bar(enemy, enemy_screen_pos)
 
             # draw player
             self.screen.blit(
@@ -120,16 +131,60 @@ class sm_game:
         except:
             pass
 
+    def draw_enemy_health_bar(self, enemy, screen_pos):
+        if enemy.hp <= 0:
+            return
+
+        # Health bar dimensions
+        bar_width = 40
+        bar_height = 4
+        border_thickness = 1
+
+        # Calculate health percentage
+        health_percentage = enemy.hp / enemy.max_hp
+
+        # Health bar position (above the enemy)
+        bar_x = screen_pos[0] + 12  # center above enemy
+        bar_y = screen_pos[1] - bar_height - 2  # 2 pixels above enemy
+
+        # Draw border
+        border_rect = pygame.Rect(
+            bar_x - border_thickness,
+            bar_y - border_thickness,
+            bar_width + 2 * border_thickness,
+            bar_height + 2 * border_thickness,
+        )
+        pygame.draw.rect(self.screen, (0, 0, 0), border_rect)
+
+        # Draw background (empty health)
+        background_rect = pygame.Rect(bar_x, bar_y, bar_width, bar_height)
+        pygame.draw.rect(self.screen, (255, 0, 0), background_rect)
+
+        # Draw current health
+        health_width = int(bar_width * health_percentage)
+        if health_width > 0:
+            health_rect = pygame.Rect(bar_x, bar_y, health_width, bar_height)
+            pygame.draw.rect(self.screen, (0, 255, 0), health_rect)
+
     def update(self):
         # run update functions for scene and player if current scene is game scene
         if self.scenes[self.current_scene].is_game_scene:
+            # Update enemies if scene has enemies
+            if hasattr(self.scenes[self.current_scene], "enemies"):
+                for enemy in self.scenes[self.current_scene].enemies:
+                    # Update enemy animation and ai
+                    enemy.ai(self.scenes[self.current_scene].player.rect.topleft)
+                    enemy.update(self.dt)
             # only update player when camera isnt moving
             if not self.scenes[self.current_scene].camera.lock_player:
                 self.scenes[self.current_scene].player.update(
                     self.scenes[self.current_scene].tilemap,
                     self.scenes[self.current_scene].collides,
                 )
+            # update scene
             self.scenes[self.current_scene].update()
+
+            # update camera
             self.scenes[self.current_scene].camera.update(
                 self.scenes[self.current_scene].player,
                 self.cam_scroll_style,

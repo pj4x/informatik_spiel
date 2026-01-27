@@ -47,7 +47,16 @@ storage_btns = []
 armor_btns = []
 equip_btns = []
 
-inv = sm_load.load_inventory("data/data.db")
+
+class inven:
+    inv = []
+
+    def change_inv(self, iv):
+        self.inv = iv
+
+
+inv = inven()
+inv.change_inv(sm_load.load_inventory("data/data.db"))
 
 
 ##################################################################
@@ -68,6 +77,9 @@ items = sm_load.load_items_from_db("data/data.db")
 for i in items:
     i.image = pygame.image.load(i.image).convert_alpha()
 
+# load enemy types from data base
+enemies = sm_load.load_enemies_from_db("data/data.db")
+
 # adding scenes to main scene array
 game.add_scene(sm_scene.sm_scene(game.screen, (30, 30, 30), "test", is_game_scene=True))
 game.add_scene(
@@ -83,6 +95,7 @@ def btn_game(b: sm_button.sm_button, pos):
 
 def btn_menu(b: sm_button.sm_button, pos):
     game.change_scene(1)
+    sm_load.store_inventory("data/data.db", inv.inv[0], inv.inv[1], inv.inv[2])
 
 
 def btn_quit(b: sm_button.sm_button, pos):
@@ -92,6 +105,28 @@ def btn_quit(b: sm_button.sm_button, pos):
 
 def btn_inv(b: sm_button.sm_button, pos):
     game.change_scene(2)
+    inv.change_inv(sm_load.load_inventory("data/data.db"))
+    for i in range(42):
+        if inv.inv[0][i] > -1:
+            game.scenes[2].icons[i].image = pygame.transform.scale(
+                items[inv.inv[0][i]].image, (50, 50)
+            )
+        else:
+            game.scenes[2].icons[i].image = empty_texture
+    for i in range(2):
+        if inv.inv[1][i] > -1:
+            game.scenes[2].icons[42 + i].image = pygame.transform.scale(
+                items[inv.inv[1][i]].image, (50, 50)
+            )
+        else:
+            game.scenes[2].icons[42 + i].image = empty_texture
+    for i in range(4):
+        if inv.inv[2][i] > -1:
+            game.scenes[2].icons[44 + i].image = pygame.transform.scale(
+                items[inv.inv[2][i]].image, (50, 50)
+            )
+        else:
+            game.scenes[2].icons[44 + i].image = empty_texture
 
 
 def btn_storage(b: sm_button.sm_button, pos):
@@ -146,8 +181,8 @@ def btn_equip(b: sm_button.sm_button, pos):
 game.scenes[1].add_text(
     sm_text.sm_text(
         "Main Menu",
-        int(330*1.6),
-        int(10*1.2),
+        int(330 * 1.6),
+        int(10 * 1.2),
         pygame.font.SysFont("arial", 42),
         (255, 255, 255),
     )
@@ -155,10 +190,10 @@ game.scenes[1].add_text(
 
 game.scenes[1].add_button(
     sm_button.sm_button(
-        int(1.6*400),
-        int(1.2*100),
-        int(1.6*200),
-        int(1.2*100),
+        int(1.6 * 400),
+        int(1.2 * 100),
+        int(1.6 * 200),
+        int(1.2 * 100),
         "Play",
         (32, 220, 35),
         pygame.font.SysFont("arial", 42),
@@ -168,10 +203,10 @@ game.scenes[1].add_button(
 )
 game.scenes[1].add_button(
     sm_button.sm_button(
-        int(1.6*400),
-        int(1.2*100),
-        int(1.6*200),
-        int(1.2*250),
+        int(1.6 * 400),
+        int(1.2 * 100),
+        int(1.6 * 200),
+        int(1.2 * 250),
         "Inventory",
         (100, 0, 0),
         pygame.font.SysFont("arial", 42),
@@ -181,10 +216,10 @@ game.scenes[1].add_button(
 )
 game.scenes[1].add_button(
     sm_button.sm_button(
-        int(1.6*400),
-        int(1.2*100),
-        int(1.6*200),
-        int(1.2*400),
+        int(1.6 * 400),
+        int(1.2 * 100),
+        int(1.6 * 200),
+        int(1.2 * 400),
         "Quit Game",
         (136, 136, 255),
         pygame.font.SysFont("arial", 42),
@@ -192,7 +227,6 @@ game.scenes[1].add_button(
         btn_quit,
     )
 )
-
 
 
 game.scenes[0].add_player(
@@ -257,48 +291,50 @@ for y in range(127, 130):
 
 tiles = [
     pygame.image.load("textures/map/brick_wall.png").convert_alpha(),  # 1
-    pygame.image.load("textures/map/chest.png").convert_alpha(), # 2
-    pygame.image.load("textures/map/exit.png").convert_alpha(), # 3
+    pygame.image.load("textures/map/chest.png").convert_alpha(),  # 2
+    pygame.image.load("textures/map/exit.png").convert_alpha(),  # 3
 ]
 
 # Ensure correct size
 tiles = [pygame.transform.scale(t, (TILE_SIZE, TILE_SIZE)) for t in tiles]
 
 # tiles with collision
-collides = [1,2,3]
+collides = [1, 2, 3]
 
 # tiles with chest
-chest = 1000
-for i in range(chest):
+for i in range(1000):
     x = 0
     y = 0
     while tilemap[x][y] == 1:
-        x = random.randint(0,255)
-        y = random.randint(0,255)
+        x = random.randint(0, 255)
+        y = random.randint(0, 255)
         if tilemap[x][y] == 0:
             tilemap[x][y] = 2
+            # game.scenes[0].add_enemy(e)
 
-#exit tile
-exits = 20
-for i in range(exits):
-    x = random.randint(10,245)
-    y = random.randint(10,245)
+# exit tile
+for i in range(20):
+    x = random.randint(10, 245)
+    y = random.randint(10, 245)
     for i in range(3):
         for j in range(3):
-            tilemap[y+i][x+j] = 0
-    tilemap[y+1][x+1] = 3
-
-
+            tilemap[y + i][x + j] = 0
+    tilemap[y + 1][x + 1] = 3
 
 
 game.scenes[0].add_map(tilemap, tiles, collides)
+
+e = enemies[0]
+e.x = (256 * 64) // 2
+e.y = (256 * 64) // 2
+game.scenes[0].add_enemy(e)
 
 # inventory scene
 game.scenes[2].add_text(
     sm_text.sm_text(
         "Inventory",
-        int(1.6*300),
-        int(1.2*5),
+        int(1.6 * 300),
+        int(1.2 * 5),
         pygame.font.SysFont("arial", 42),
         (255, 255, 255),
     )
@@ -308,8 +344,8 @@ game.scenes[2].add_text(
 game.scenes[2].add_text(
     sm_text.sm_text(
         "Storage",
-        int(1.6*535),
-        int(1.2*40),
+        int(1.6 * 535),
+        int(1.2 * 40),
         pygame.font.SysFont("arial", 24),
         (255, 255, 255),
     )
@@ -318,8 +354,8 @@ game.scenes[2].add_text(
 game.scenes[2].add_text(
     sm_text.sm_text(
         "Player Equipement",
-        int(1.6*40),
-        int(1.2*40),
+        int(1.6 * 40),
+        int(1.2 * 40),
         pygame.font.SysFont("arial", 24),
         (255, 255, 255),
     )
@@ -333,8 +369,8 @@ for i in range(6):
             sm_button.sm_button(
                 50,
                 50,
-                int(1.6*380 + (i * 70)),
-                int(1.2*80 + (j * 70)),
+                int(1.6 * 380 + (i * 70)),
+                int(1.2 * 80 + (j * 70)),
                 "",
                 (105, 105, 105),
                 pygame.font.SysFont("arial", 42),
@@ -345,19 +381,15 @@ for i in range(6):
         # set texture of icon to item in that slot
         index = (i * 7) + j
         img = empty_texture
-        if inv[0][index] > -1 and inv[0][index] < len(items):
-            img = items[inv[0][index]].image
+        if inv.inv[0][index] > -1 and inv.inv[0][index] < len(items):
+            img = items[inv.inv[0][index]].image
 
         game.scenes[2].add_icon(
             sm_icon.sm_icon(
-                int(1.6*380 + (i * 70)),
-                int(1.2*80 + (j * 70)),
-                50,
-                50,
-                img
+                int(1.6 * 380 + (i * 70)), int(1.2 * 80 + (j * 70)), 50, 50, img
             )
         )
-        storage_btns.append((int(1.6*380 + (i * 70)), int(1.2*80 + (j * 70))))
+        storage_btns.append((int(1.6 * 380 + (i * 70)), int(1.2 * 80 + (j * 70))))
 
 
 # two armor slots
@@ -366,8 +398,8 @@ for i in range(2):
         sm_button.sm_button(
             50,
             50,
-            int(1.6*250),
-            int(1.2*80 + (i * 70)),
+            int(1.6 * 250),
+            int(1.2 * 80 + (i * 70)),
             "",
             (105, 105, 105),
             pygame.font.SysFont("arial", 42),
@@ -377,19 +409,13 @@ for i in range(2):
     )
     # set texture
     img = empty_texture
-    if inv[1][i] > -1 and inv[1][i] < len(items):
-        img = items[inv[0][i]].image
+    if inv.inv[1][i] > -1 and inv.inv[1][i] < len(items):
+        img = items[inv.inv[0][i]].image
 
     game.scenes[2].add_icon(
-        sm_icon.sm_icon(
-            int(1.6*250),
-            int(1.2*80 + (i * 70)),
-            50,
-            50,
-            img
-        )
+        sm_icon.sm_icon(int(1.6 * 250), int(1.2 * 80 + (i * 70)), 50, 50, img)
     )
-    armor_btns.append((int(1.6*250), int(1.2*80 + (i * 70))))
+    armor_btns.append((int(1.6 * 250), int(1.2 * 80 + (i * 70))))
 
 # four equip slots
 for i in range(4):
@@ -397,8 +423,8 @@ for i in range(4):
         sm_button.sm_button(
             50,
             50,
-            int(1.6*40 + (i * 70)),
-            int(1.2*360),
+            int(1.6 * 40 + (i * 70)),
+            int(1.2 * 360),
             "",
             (105, 105, 105),
             pygame.font.SysFont("arial", 42),
@@ -409,26 +435,20 @@ for i in range(4):
     # set textures
     # set texture
     img = empty_texture
-    if inv[2][i] > -1 and inv[2][i] < len(items):
-        img = items[inv[0][i]].image
+    if inv.inv[2][i] > -1 and inv.inv[2][i] < len(items):
+        img = items[inv.inv[0][i]].image
 
     game.scenes[2].add_icon(
-        sm_icon.sm_icon(
-            int(1.6*40 + (i * 70)),
-            int(1.2*360),
-            50,
-            50,
-            img
-        )
+        sm_icon.sm_icon(int(1.6 * 40 + (i * 70)), int(1.2 * 360), 50, 50, img)
     )
-    equip_btns.append((int(1.6*40 + (i * 70)), int(1.2*360)))
+    equip_btns.append((int(1.6 * 40 + (i * 70)), int(1.2 * 360)))
 
 # player icon
 # TODO change image
 game.scenes[2].add_icon(
     sm_icon.sm_icon(
-        int(1.6*40),
-        int(1.2*80),
+        int(1.6 * 40),
+        int(1.2 * 80),
         190,
         260,
         pygame.image.load("textures/sprites/player.png").convert_alpha(),
@@ -439,8 +459,8 @@ game.scenes[2].add_button(
     sm_button.sm_button(
         190,
         50,
-        int(1.6*40),
-        int(1.2*500),
+        int(1.6 * 40),
+        int(1.2 * 500),
         "Back to Main Menu",
         (0, 255, 0),
         pygame.font.SysFont("arial", 20),
